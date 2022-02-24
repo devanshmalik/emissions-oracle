@@ -4,7 +4,6 @@ entry_point = (
     "emissions-oracle = emissions_oracle.__main__:main"
 )
 
-
 # get the dependencies and installs
 with open("requirements.txt", encoding="utf-8") as f:
     # Make sure we strip all comments and options (e.g "--extra-index-url")
