@@ -1,0 +1,15 @@
+black
+flake8
+ipython
+isort
+jupyterlab
+pytest-cov
+pytest-mock
+pytest
+wheel
+furo
+pandas
+pystan
+prophet
+plotly
+ipywidgets
