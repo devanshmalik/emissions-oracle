@@ -5,13 +5,10 @@ import json
 import logging
 import pandas as pd
 
+from src.d00_utils.const import *
+
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-
-EIA_URL = "https://api.eia.gov/series/?series_id={}&api_key={}&out=json"
-YML_FILE_PATH = os.path.join(os.getcwd(), '../conf/base/', 'states.yml')
-RAW_DATA_FOLDER = os.path.join(os.getcwd(), '../data/01_raw/')
-INTERMEDIATE_DATA_FOLDER = os.path.join(os.getcwd(), '../data/02_intermediate/')
 
 
 class EIADataPull:
@@ -19,13 +16,8 @@ class EIADataPull:
     def __init__(self, series_id, file_path):
         self.series_id = series_id
         self.file_path = file_path
-        self.states = self.get_states_yml()
+        self.states = STATES
         self.responses = []
-
-    @staticmethod
-    def get_states_yml():
-        states_yaml = open(YML_FILE_PATH)
-        return yaml.load(states_yaml, Loader=yaml.FullLoader)
 
     # TODO: Add error handling for failed requests
     def request_data(self):

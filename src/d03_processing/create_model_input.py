@@ -3,24 +3,18 @@ import logging
 import pandas as pd
 import yaml
 
+from src.d00_utils.const import *
+
+
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-
-YML_FILE_PATH = os.path.join(os.getcwd(), '../conf/base/', 'states.yml')
-INTERMEDIATE_DATA_FOLDER = os.path.join(os.getcwd(), '../data/02_intermediate/')
-PROCESSED_DATA_FOLDER = os.path.join(os.getcwd(), '../data/03_processed/')
 
 
 class DataPreprocessor:
     """Class to preprocess intermediate data prior to training models"""
     def __init__(self, file_path):
         self.file_path = file_path
-        self.states = self.get_states_yml()
-
-    @staticmethod
-    def get_states_yml():
-        states_yaml = open(YML_FILE_PATH)
-        return yaml.load(states_yaml, Loader=yaml.FullLoader)
+        self.states = STATES
 
     def create_prophet_data(self):
         intermediate_file_path = os.path.join(INTERMEDIATE_DATA_FOLDER, self.file_path)

@@ -6,24 +6,17 @@ from prophet import Prophet
 import json
 from prophet.serialize import model_to_json
 
+from src.d00_utils.const import *
+
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-
-YML_FILE_PATH = os.path.join(os.getcwd(), '../conf/base/', 'states.yml')
-PROCESSED_DATA_FOLDER = os.path.join(os.getcwd(), '../data/03_processed/')
-MODELS_FOLDER = os.path.join(os.getcwd(), '../data/04_models/')
 
 
 class ProphetModel:
     """Class to train Facebook Prophet models"""
     def __init__(self, file_path):
         self.file_path = file_path
-        self.states = self.get_states_yml()
-
-    @staticmethod
-    def get_states_yml():
-        states_yaml = open(YML_FILE_PATH)
-        return yaml.load(states_yaml, Loader=yaml.FullLoader)
+        self.states = STATES
 
     def train(self):
         processed_file_path = os.path.join(PROCESSED_DATA_FOLDER, self.file_path)

@@ -15,3 +15,5 @@ plotly
 ipywidgets
 python-dotenv
 yml
+sklearn
+streamlit
