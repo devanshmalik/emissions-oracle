@@ -54,7 +54,7 @@ class EIADataPull:
                 df.columns = ["date", "net_generation"]
 
                 # Convert year_quarter (2021Q3) into date ('2021-09-30') format
-                qs = df['date'].str.replace(r'(\d+)(Q\d)', r'\1-\2')
+                qs = df['date'].str.replace(r'(\d+)(Q\d)', r'\1-\2', regex=True)
                 df['date'] = pd.PeriodIndex(qs, freq='Q').to_timestamp()
                 df['date'] = df['date'] + pd.offsets.QuarterEnd(0)
 
