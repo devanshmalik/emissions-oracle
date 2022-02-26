@@ -1,7 +1,12 @@
 import os
-import yaml
+
+from src.d00_utils.utils import load_yml
+
 
 PREFIX = ".." if os.path.basename(os.getcwd()) == "src" else ""
+# Temp for jupyter notebook testing
+if os.path.basename(os.getcwd()) == "notebooks":
+    PREFIX = ".."
 
 # API URLs
 EIA_URL = "https://api.eia.gov/series/?series_id={}&api_key={}&out=json"
@@ -13,14 +18,12 @@ PROCESSED_DATA_FOLDER = os.path.join(PREFIX, 'data/03_processed/')
 MODELS_FOLDER = os.path.join(PREFIX, 'data/04_models/')
 REPORTING_FOLDER = os.path.join(PREFIX, 'data/06_reporting/')
 
+# YML File Paths
+EIA_API_IDS_YML_FILEPATH = os.path.join(PREFIX, 'conf/base/eia_api_ids.yml')
+STATES_YML_FILEPATH = os.path.join(PREFIX, 'conf/base/states.yml')
 
-# States of interest
-def get_states_yml():
-    states_yaml = open(STATES_YML_FILE_PATH)
-    return yaml.load(states_yaml, Loader=yaml.FullLoader)
+STATES = load_yml(STATES_YML_FILEPATH)
 
 
-STATES_YML_FILE_PATH = os.path.join(PREFIX, 'conf/base/states.yml')
-STATES = get_states_yml()
 
 

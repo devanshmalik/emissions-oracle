@@ -34,6 +34,22 @@ class MultiPage:
         )
 
     def run(self):
+        # Custom size sidebar
+        st.markdown(
+            """
+            <style>
+            [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+                width: 300px;
+            }
+            [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+                width: 300px;
+                margin-left: -300px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
         # Dropdown to select the page to run
         page = st.sidebar.selectbox(
             'App Navigation',

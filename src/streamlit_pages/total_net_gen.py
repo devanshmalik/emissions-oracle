@@ -4,12 +4,14 @@ import json
 
 from prophet.plot import plot_plotly, plot_components_plotly
 from src.d00_utils.const import *
+from src.d00_utils.utils import get_filepath
 
 
 def app():
-    file_path = 'Net_Gen_By_State/net_generation_{}.{}'
-    models_file_path = os.path.join(MODELS_FOLDER, file_path)
-    reporting_file_path = os.path.join(REPORTING_FOLDER, file_path)
+    save_folder = 'Net_Gen_By_State'
+    file_name = 'net_generation_{}.{}'
+    models_file_path = get_filepath(MODELS_FOLDER, save_folder, file_name)
+    reporting_file_path = get_filepath(REPORTING_FOLDER, save_folder, file_name)
 
     chosen_state = st.selectbox('Pick a state to visualize', STATES)
     st.write(f"State Chosen: {chosen_state}")

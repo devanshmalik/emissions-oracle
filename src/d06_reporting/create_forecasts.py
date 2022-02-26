@@ -7,6 +7,7 @@ import json
 from prophet.serialize import model_from_json
 
 from src.d00_utils.const import *
+from src.d00_utils.utils import get_filepath
 
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -14,13 +15,14 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class ModelForecast:
     """Class to create forecasts based on models trained earlier"""
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self, save_folder, file_name):
+        self.save_folder = save_folder
+        self.file_name = file_name
         self.states = STATES
 
     def forecast(self):
-        models_file_path = os.path.join(MODELS_FOLDER, self.file_path)
-        reporting_file_path = os.path.join(REPORTING_FOLDER, self.file_path)
+        models_file_path = get_filepath(MODELS_FOLDER, self.save_folder, self.file_name)
+        reporting_file_path = get_filepath(REPORTING_FOLDER, self.save_folder, self.file_name)
 
         for state in self.states:
             # Load Model
@@ -37,10 +39,11 @@ class ModelForecast:
 
 
 def create_forecasts():
-    file_path = 'Net_Gen_By_State/net_generation_{}.{}'
+    save_folder = 'Net_Gen_By_State'
+    file_name = 'net_generation_{}.{}'
 
     log.info("Creating forecasts using trained Prophet models...")
-    data_process = ModelForecast(file_path=file_path)
+    data_process = ModelForecast(save_folder=save_folder, file_name=file_name)
     data_process.forecast()
     log.info("Finished creating and saving forecasts.")
 
