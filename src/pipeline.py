@@ -2,7 +2,6 @@
 
 from src.d00_utils.const import *
 from src.d00_utils.utils import setup_env_vars, load_yml
-# from src.d01_data.get_raw_data_outdated import load_data
 from src.d01_data.get_raw_data import load_all_data
 from src.d03_processing.create_model_input import process_data
 from src.d04_modelling.create_prophet_models import train_models
