@@ -31,21 +31,24 @@ class EIADataPull:
             json.dump(response.json(), f, ensure_ascii=False, indent=4)
 
     # TODO: Add error handling for failed requests
-    def create_intermediate_data(self, state):
-        raw_file_path = get_filepath(RAW_DATA_FOLDER, self.save_folder, self.file_name)
-        intermediate_file_path = get_filepath(INTERMEDIATE_DATA_FOLDER, self.save_folder, self.file_name)
+    # Handle Nulls, values close to or almost zero
+    def create_intermediate_data(self, data_type, fuel_type):
+        raw_file_name = '{}-{}.{}'.format(data_type, fuel_type, 'json')
+        intermediate_file_name = '{}-{}.{}'.format(data_type, fuel_type, 'csv')
+        raw_file_path = get_filepath(RAW_DATA_FOLDER, self.save_folder, raw_file_name)
+        intermediate_file_path = get_filepath(INTERMEDIATE_DATA_FOLDER, self.save_folder, intermediate_file_name)
 
-        with open(raw_file_path.format(state, 'json'), 'r') as f:
+        with open(raw_file_path, 'r') as f:
             json_data = json.load(f)
             df = pd.DataFrame(json_data['series'][0]['data'])
-            df.columns = ["date", "net_generation"]
+            df.columns = ["date", data_type]
 
             # Convert year_quarter (2021Q3) into date ('2021-09-30') format
             qs = df['date'].str.replace(r'(\d+)(Q\d)', r'\1-\2', regex=True)
             df['date'] = pd.PeriodIndex(qs, freq='Q').to_timestamp()
             df['date'] = df['date'] + pd.offsets.QuarterEnd(0)
 
-            df.to_csv(intermediate_file_path.format(state, 'csv'), index=False)
+            df.to_csv(intermediate_file_path, index=False)
 
 
 def load_data(data_type, api_ids_dict):
@@ -57,6 +60,8 @@ def load_data(data_type, api_ids_dict):
             file_name = '{}-{}.json'.format(data_type, fuel_type)
             response = eia_data_pull.request_data(api_id, state)
             eia_data_pull.save_data(response, file_name)
+
+            eia_data_pull.create_intermediate_data(data_type, fuel_type)
 
 
 def load_all_data(eia_api_ids):
