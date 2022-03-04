@@ -9,8 +9,8 @@ pytest
 wheel
 furo
 pandas
-pystan
-prophet
+pystan=2.19.1.1
+fbprophet
 plotly
 ipywidgets
 python-dotenv
@@ -18,3 +18,4 @@ yml
 sklearn
 streamlit
 requests
+kats

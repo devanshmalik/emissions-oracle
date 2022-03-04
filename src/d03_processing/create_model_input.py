@@ -1,11 +1,8 @@
-import os
 import logging
 import pandas as pd
-import yaml
 
 from src.d00_utils.const import *
 from src.d00_utils.utils import get_filepath
-
 
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -13,6 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class DataPreprocessor:
     """Class to preprocess intermediate data prior to training models"""
+
     def __init__(self, api_ids_dict, data_type):
         self.api_ids_dict = api_ids_dict
         self.data_type = data_type
@@ -22,43 +20,67 @@ class DataPreprocessor:
         for state in STATES:
             self.save_folder = '{}/{}'.format(self.data_type, state)
 
-            for fuel_type, api_id in self.api_ids_dict.items():
-                self.create_features(fuel_type)
+            if self.data_type == 'Net_Gen_By_Fuel_MWh':
+                self.process_net_gen_data()
+            elif self.data_type == "Fuel_Consumption_BTU":
+                self.process_fuel_cons_data()
+            else:
+                raise ValueError(f"Unexpected EIA Data Type encountered: {self.data_type}")
 
-    def create_features(self, fuel_type):
+    def read_input_data(self, fuel_type):
         """
-        Performs two imputations on each CSV file in 02_intermediate data folder:
-        1) Impute 0 for all rows with missing y value (eg: Net_Gen_By_Fuel_MWh)
-        2) For any missing quarters between 2001 and 2021, create a new row for the
-        missing date with a y value of zero. This ensures the time-series training
-        algorithm has data points for all time periods without any missing periods.
-
+        Reads data from intermediate folder for specific fuel type
         :param fuel_type:
         :return:
         """
         intermediate_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
-        processed_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
         intermediate_file_path = get_filepath(INTERMEDIATE_DATA_FOLDER, self.save_folder, intermediate_file_name)
+        return pd.read_csv(intermediate_file_path)
+
+    def save_feature(self, df, fuel_type):
+        """
+        Saves the final engineering feature ready for model training in Processed Data folder.
+
+        :param df:
+        :param fuel_type:
+        :return:
+        """
+        processed_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
         processed_file_path = get_filepath(PROCESSED_DATA_FOLDER, self.save_folder, processed_file_name)
 
-        df = pd.read_csv(intermediate_file_path)
-        # Do feature engineering here to create model training data
+        # Prophet expects column names to be 'ds' and 'y'
+        df.columns = ['ds', 'y']
         df.to_csv(processed_file_path, index=False)
+
+    def process_net_gen_data(self):
+        # No processing needed for most fuels
+        no_processing_fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear',
+                               'hydro', 'wind', 'solar_all']
+        for fuel_type in no_processing_fuels:
+            df = self.read_input_data(fuel_type)
+            self.save_feature(df, fuel_type)
+
+        # Compute feature for "Other" generation
+        # Note: The calculated version is different from the "Other" imported from EIA directly
+        df_other_rw = self.read_input_data("other_renewables")
+        df_wind = self.read_input_data("wind")
+        df_solar_utility = self.read_input_data("solar_utility")
+        df_eia_other = self.read_input_data("other")
+
+        # Calculate 'Other' gen
+        df_other = pd.DataFrame()
+        df_other['date'] = df_other_rw['date']
+        df_other[self.data_type] = df_other_rw[self.data_type] - df_wind[self.data_type] \
+                                   - df_solar_utility[self.data_type] + df_eia_other[self.data_type]
+        self.save_feature(df_other, "other")
+
+    def process_fuel_cons_data(self):
+        for fuel_type in self.api_ids_dict.keys():
+            df = self.read_input_data(fuel_type)
+            self.save_feature(df, fuel_type)
 
 
 def process_all_data(eia_api_ids):
     for data_type, api_ids_dict in eia_api_ids.items():
         data_process = DataPreprocessor(api_ids_dict=api_ids_dict, data_type=data_type)
         data_process.process_data()
-
-
-    # def create_prophet_data_old(self):
-    #     intermediate_file_path = get_filepath(INTERMEDIATE_DATA_FOLDER, self.save_folder, self.file_name)
-    #     processed_file_path = get_filepath(PROCESSED_DATA_FOLDER, self.save_folder, self.file_name)
-    #
-    #     for state in self.states:
-    #         df = pd.read_csv(intermediate_file_path.format(state, 'csv'))
-    #         df['date'] = pd.to_datetime(df['date'])
-    #         df.columns = ['ds', 'y']
-    #
-    #         df.to_csv(processed_file_path.format(state, 'csv'), index=False)
