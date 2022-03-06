@@ -4,36 +4,33 @@ import json
 
 from prophet.plot import plot_plotly, plot_components_plotly
 from src.d00_utils.const import *
-from src.d00_utils.utils import get_filepath
+from src.d00_utils.utils import get_filepath, load_yml, load_config
+from src.d06_reporting.create_forecasts import read_forecast
+from src.d06_visualization.plot import plot
+
+EIA_API_IDS = load_yml(EIA_API_IDS_YML_FILEPATH)
 
 
 def app():
-    save_folder = 'Net_Gen_By_State'
-    file_name = 'net_generation_{}.{}'
-    models_file_path = get_filepath(MODELS_FOLDER, save_folder, file_name)
-    reporting_file_path = get_filepath(REPORTING_FOLDER, save_folder, file_name)
+    config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
-    chosen_state = st.selectbox('Pick a state to visualize', STATES)
-    st.write(f"State Chosen: {chosen_state}")
+    # Option to select prediction type
+    chosen_data_type = st.radio("Select the type of data you want to analyze.",
+                         options=["Net Electricity Generation (MWh)", "Electricity Fuel Consumption (BTU)"],
+                         help="Write about reg and classification")
+    data_type = 'Net_Gen_By_Fuel_MWh' if chosen_data_type == "Net Electricity Generation (MWh)" else "Fuel_Consumption_BTU"
 
-
-    @st.cache
-    def refresh_plots(state):
-        with open(models_file_path.format(state, 'json'), 'r') as fin:
-            model = model_from_json(json.load(fin))
-
-            future = model.make_future_dataframe(periods=16, freq='Q')
-            forecast = model.predict(future)
-            # forecast = pd.read_csv(reporting_file_path.format('AL', 'csv'))
-
-            return model, forecast
+    # Use two column technique
+    col1, col2 = st.columns(2)
+    # Design column 1
+    chosen_state = col1.selectbox('Pick a state to visualize', STATES)
+    chosen_fuel = col2.selectbox('Pick a fuel type', config["data_types"][data_type]["fuels"])
 
 
-    model, forecast = refresh_plots(chosen_state)
-    fig1 = plot_plotly(model, forecast)
-    st.write(fig1)
+    forecast_type = 'individual'
+    df = read_forecast(data_type, forecast_type, chosen_state, chosen_fuel)
 
-    fig2 = plot_components_plotly(model, forecast)
-    st.write(fig2)
+    fig = plot(df)
+    st.write(fig)
 
 

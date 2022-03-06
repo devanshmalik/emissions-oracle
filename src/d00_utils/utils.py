@@ -4,6 +4,17 @@ import os
 from pathlib import Path
 import yaml
 
+from typing import Any, Dict, Tuple
+
+import io
+from pathlib import Path
+
+import pandas as pd
+import requests
+import streamlit as st
+import toml
+
+from src.d00_utils.const import *
 
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -40,3 +51,23 @@ def load_yml(filepath):
     return yaml.load(yaml_file, Loader=yaml.FullLoader)
 
 
+@st.cache(allow_output_mutation=True, ttl=300)
+def load_config(filepath) -> dict:
+    """Loads configuration files.
+    Parameters
+    ----------
+    config_streamlit_filename : str
+        Filename of lib configuration file.
+    config_instructions_filename : str
+        Filename of custom config instruction file.
+    config_readme_filename : str
+        Filename of readme configuration file.
+    Returns
+    -------
+    dict
+        Lib configuration file.
+    dict
+        Readme configuration file.
+        :param filepath:
+    """
+    return dict(toml.load(filepath))

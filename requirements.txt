@@ -18,3 +18,4 @@ yml
 sklearn
 streamlit
 requests
+matplotlib

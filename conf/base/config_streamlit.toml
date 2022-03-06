@@ -1,0 +1,22 @@
+[data_types]
+
+[data_types.Net_Gen_By_Fuel_MWh]
+fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear', 'hydro', 'wind', 'solar_all', 'other']
+
+[data_types.Fuel_Consumption_BTU]
+fuels = ['coal', 'natural_gas']
+
+[columns]
+date = false # Name of date column, choose false to select it directly in the app.
+target = false # Name of target column, choose false to select it directly in the app.
+dimensions = false # List of dimension columns, choose false to select it directly in the app.
+regressors = false # List of regressor columns, choose false to select it directly in the app.
+
+[dataprep] # Default dataprep parameters
+date_format = "%Y-%m-%d"
+dimensions_agg = ["Mean", "Sum", "Min", "Max"] # List of possible target agg functions over dimensions. First is the default option.
+remove_days = [] # List of days of week to remove from dataset.
+# Select up to 6 elements among "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday".
+remove_zeros = true # Whether or not to remove rows where target is 0 (true or false).
+remove_negative = true # Whether or not to remove rows where target is <0 (true or false).
+log_transform = false # Whether or not to apply a target log transform (true or false).

@@ -107,6 +107,21 @@ def create_all_forecasts(eia_api_ids):
     log.info("Finished all forecasting")
 
 
+def read_forecast(data_type, forecast_type, state, fuel_type=None):
+    target_folder = ""
+    file_name = ""
+    if forecast_type == 'individual':
+        target_folder = 'Individual_Forecasts/{}/{}'.format(data_type, state)
+        file_name = '{}-{}.csv'.format(data_type, fuel_type)
+    elif forecast_type == 'combined':
+        target_folder = 'Combined_Forecasts/{}'.format(state)
+        file_name = '{}-Combined.csv'.format(data_type)
+    file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
+    return pd.read_csv(file_path)
+
+
+
+
 # Non-interactive plots
 # fig1 = m.plot(forecast)
 # fig2 = m.plot_components(forecast)
