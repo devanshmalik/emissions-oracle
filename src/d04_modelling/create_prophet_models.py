@@ -12,6 +12,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 
 class ModelTrainer:
+    # TODO: Pull directly from config instead of hard coding in script
     net_gen_fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear',
                      'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']

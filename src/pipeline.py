@@ -1,4 +1,4 @@
-#TODO: Create an interface class to run different steps of model pipeline
+# TODO: Create an interface class to run different steps of model pipeline
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 

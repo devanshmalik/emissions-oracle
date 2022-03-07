@@ -15,6 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class ModelForecast:
     """Class to create forecasts based on models trained earlier"""
+    # TODO: Pull directly from config instead of hard coding in script
     net_gen_fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear',
                      'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']
@@ -24,6 +25,7 @@ class ModelForecast:
         self.save_folder = ""
 
     def forecast(self):
+        log.info(f"Starting forecasting for {self.data_type}")
         for state in STATES:
             log.info(f"Forecasting for State: {state}")
             self.save_folder = '{}/{}'.format(self.data_type, state)
@@ -37,14 +39,13 @@ class ModelForecast:
 
             self.generate_individual_forecasts(fuel_types, state)
             self.combine_forecasts(fuel_types, state)
-            log.info(f"Completed forecasting for State: {state}")
+            log.info(f"Completed {self.data_type} forecasting for State: {state}")
 
     def generate_individual_forecasts(self, fuel_types, state):
         for fuel_type in fuel_types:
             model = self.read_prophet_model(fuel_type)
             forecast = self.predict(model)
             self.save_individual_forecast(forecast, fuel_type)
-        log.info(f"Finished individual forecasting for {self.data_type}")
 
     def read_prophet_model(self, fuel_type):
         models_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'json')
@@ -71,7 +72,6 @@ class ModelForecast:
         forecast.to_csv(reporting_file_path, index=False)
 
     def combine_forecasts(self, fuel_types, state):
-        log.info(f"Combining individual forecasts for {self.data_type}")
         df_combined = pd.DataFrame()
         # TODO: Do not add all_fuels to dataframe
         for fuel in fuel_types:
