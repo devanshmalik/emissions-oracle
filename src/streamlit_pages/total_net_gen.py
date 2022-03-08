@@ -6,7 +6,13 @@ import json
 from src.d00_utils.const import *
 from src.d00_utils.utils import get_filepath, load_yml, load_config
 from src.d06_reporting.create_forecasts import read_forecast
-from src.d06_visualization.plot import plot, plot_plotly_individual, plot_plotly_combined
+from src.d06_reporting.calculate_emissions import read_emissions
+from src.d06_visualization.plot import (
+    plot,
+    plot_plotly_individual,
+    plot_plotly_combined,
+    plot_multiple_states
+)
 
 EIA_API_IDS = load_yml(EIA_API_IDS_YML_FILEPATH)
 
@@ -21,15 +27,15 @@ def app():
     data_type = 'Net_Gen_By_Fuel_MWh' if chosen_data_type == "Net Electricity Generation (MWh)" else "Fuel_Consumption_BTU"
     fuel_options = config["data_types"][data_type]["fuels"]
 
-    with st.expander("One State Analysis", expanded=True):
+    with st.expander("Single Region Analysis", expanded=False):
         # Columns to select state, individual vs combined chart
         col1, col2, col3 = st.columns(3)
-        chosen_state = col1.selectbox('Pick a state to visualize', STATES)
+        chosen_state = col1.selectbox('Pick a region to visualize', STATES)
         is_combined_chart = col3.checkbox(
             "Show all fuels on chart", value=False, help="Add a help message here."
         )
         chosen_fuel = col2.selectbox(
-            "Pick a fuel type", options=fuel_options, disabled=is_combined_chart
+            "Pick a fuel type", options=fuel_options, disabled=is_combined_chart, key="fuel_1"
         )
         chosen_fuel_multi = st.multiselect(
             'For all fuels chart, pick curves to view.', options=fuel_options, default=fuel_options,
@@ -45,4 +51,34 @@ def app():
             fcst = read_forecast(data_type, 'individual', chosen_state, chosen_fuel)
             fig = plot_plotly_individual(fcst)
             st.plotly_chart(fig)
+
+
+    with st.expander("Multi Regions Analysis", expanded=False):
+        # Columns to select state, individual vs combined chart
+        col1, col2 = st.columns(2)
+        chosen_states_multi = col1.multiselect('Pick regions to compare.', options=STATES, default=STATES[0])
+        chosen_fuel = col2.selectbox("Pick a fuel type", options=fuel_options, key="fuel_2")
+
+        combined_fcst = {}
+        for state in chosen_states_multi:
+            fcst = read_forecast(data_type, 'combined', state)
+            combined_fcst[state] = fcst
+        fig = plot_multiple_states(combined_fcst, chosen_fuel)
+        st.plotly_chart(fig)
+
+
+    with st.expander("Emissions Analysis", expanded=True):
+        # Columns to select state, individual vs combined chart
+        col1, col2 = st.columns(2)
+        chosen_states_multi = col1.multiselect('Pick regions to compare.', options=STATES, default=STATES[0], key="state_2")
+        chosen_fuel = col2.selectbox("Pick a fuel type", options=fuel_options, key="fuel_3")
+
+        combined_fcst = {}
+        for state in chosen_states_multi:
+            fcst = read_emissions(state)
+            combined_fcst[state] = fcst
+        fig = plot_multiple_states(combined_fcst, chosen_fuel)
+        st.plotly_chart(fig)
+
+
 

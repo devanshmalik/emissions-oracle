@@ -287,3 +287,83 @@ def plot_plotly_combined(fcst, fuel_types,
         ),
     )
     return go.Figure(data=data, layout=layout)
+
+
+
+def plot_multiple_states(combined_fcst, fuel, xlabel='ds', ylabel='y', figsize=(900, 600)):
+    # Formatting
+    colors = [
+        '#1f77b4',  # muted blue
+        '#ff7f0e',  # safety orange
+        '#2ca02c',  # cooked asparagus green
+        '#d62728',  # brick red
+        '#9467bd',  # muted purple
+        '#8c564b',  # chestnut brown
+        '#e377c2',  # raspberry yogurt pink
+        '#7f7f7f',  # middle gray
+        '#bcbd22',  # curry yellow-green
+        '#17becf'   # blue-teal
+    ]
+
+    data = []
+    for idx, (state, fcst) in enumerate(combined_fcst.items()):
+        curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
+        fcst['date'] = pd.to_datetime(fcst['date'], format='%Y-%m-%d')
+        fcst_historical = fcst[fcst['date'] < curr_quarter_end]
+        fcst_preds = fcst[fcst['date'] >= curr_quarter_end]
+
+        data.append(go.Scatter(
+            name=state,
+            x=fcst_historical['date'],
+            y=fcst_historical[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2),
+        ))
+
+        data.append(go.Scatter(
+            name=state + ' Forecast',
+            x=fcst_preds['date'],
+            y=fcst_preds[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2, dash='dot'),
+        ))
+    layout = dict(
+        width=figsize[0],
+        height=figsize[1],
+        yaxis=dict(
+            title=ylabel
+        ),
+        xaxis=dict(
+            title=xlabel,
+            type='date',
+            range=[fcst['date'].min() - pd.DateOffset(months=6),
+                   fcst['date'].max() + pd.DateOffset(months=6)],
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label='1y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=3,
+                         label='3y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=5,
+                         label='5y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=10,
+                         label='10y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(step='all')
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+        ),
+    )
+    return go.Figure(data=data, layout=layout)
