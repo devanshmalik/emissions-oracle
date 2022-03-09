@@ -30,7 +30,12 @@ class EmissionsCalculator:
                 # For each fuel, multiply amount created by emissions factor
                 for col in fcst.columns:
                     if col in emissions_dict:
-                        df[col] += emissions_dict[col] * fcst[col]
+                        # Divide Net_Gen_By_Fuel_MWh emissions by 1000 to get
+                        # emissions in thousand metrics tons CO2
+                        if data_type == 'Net_Gen_By_Fuel_MWh':
+                            df[col] += (emissions_dict[col] * fcst[col] / 1e3)
+                        else:
+                            df[col] += emissions_dict[col] * fcst[col]
 
             # Sum all columns except first which is date to calculate total emissions
             df["all_fuels"] = df.iloc[:, 1:].sum(axis=1)

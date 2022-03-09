@@ -18,8 +18,9 @@ from matplotlib.dates import (
 )
 from matplotlib.ticker import FuncFormatter
 import plotly.express as px
-import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+
+import plotly.graph_objects as go
 
 from pandas.plotting import deregister_matplotlib_converters
 deregister_matplotlib_converters()
@@ -27,8 +28,19 @@ deregister_matplotlib_converters()
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
-
-
+# Formatting
+colors = [
+    '#1f77b4',  # muted blue
+    '#ff7f0e',  # safety orange
+    '#2ca02c',  # cooked asparagus green
+    '#d62728',  # brick red
+    '#9467bd',  # muted purple
+    '#8c564b',  # chestnut brown
+    '#e377c2',  # raspberry yogurt pink
+    '#7f7f7f',  # middle gray
+    '#bcbd22',  # curry yellow-green
+    '#17becf'  # blue-teal
+]
 
 def plot(
     fcst, ax=None, uncertainty=True, plot_cap=True, xlabel='ds', ylabel='y',
@@ -215,19 +227,6 @@ def plot_plotly_combined(fcst, fuel_types,
     fcst_historical = fcst[fcst['date'] < curr_quarter_end]
     fcst_preds = fcst[fcst['date'] >= curr_quarter_end]
 
-    # Formatting
-    colors = [
-        '#1f77b4',  # muted blue
-        '#ff7f0e',  # safety orange
-        '#2ca02c',  # cooked asparagus green
-        '#d62728',  # brick red
-        '#9467bd',  # muted purple
-        '#8c564b',  # chestnut brown
-        '#e377c2',  # raspberry yogurt pink
-        '#7f7f7f',  # middle gray
-        '#bcbd22',  # curry yellow-green
-        '#17becf'   # blue-teal
-    ]
 
     data = []
     for idx, fuel in enumerate(fuel_types):
@@ -289,21 +288,7 @@ def plot_plotly_combined(fcst, fuel_types,
     return go.Figure(data=data, layout=layout)
 
 
-
 def plot_multiple_states(combined_fcst, fuel, xlabel='ds', ylabel='y', figsize=(900, 600)):
-    # Formatting
-    colors = [
-        '#1f77b4',  # muted blue
-        '#ff7f0e',  # safety orange
-        '#2ca02c',  # cooked asparagus green
-        '#d62728',  # brick red
-        '#9467bd',  # muted purple
-        '#8c564b',  # chestnut brown
-        '#e377c2',  # raspberry yogurt pink
-        '#7f7f7f',  # middle gray
-        '#bcbd22',  # curry yellow-green
-        '#17becf'   # blue-teal
-    ]
 
     data = []
     for idx, (state, fcst) in enumerate(combined_fcst.items()):
@@ -367,3 +352,238 @@ def plot_multiple_states(combined_fcst, fuel, xlabel='ds', ylabel='y', figsize=(
         ),
     )
     return go.Figure(data=data, layout=layout)
+
+
+def combine_plots(combined_fcst, combined_emissions, fuel, xlabel='ds', ylabel='y', figsize=(900, 700)):
+    data = []
+    for idx, (state, fcst) in enumerate(combined_emissions.items()):
+        # Emissions Curves
+        curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
+        fcst['date'] = pd.to_datetime(fcst['date'], format='%Y-%m-%d')
+        fcst_historical = fcst[fcst['date'] < curr_quarter_end]
+        fcst_preds = fcst[fcst['date'] >= curr_quarter_end]
+
+        data.append(go.Scatter(
+            name="CO<sub>2</sub>e - " + state,
+            x=fcst_historical['date'],
+            y=fcst_historical[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2),
+        ))
+
+        data.append(go.Scatter(
+            name="CO<sub>2</sub>e - " + state + ' Forecast',
+            x=fcst_preds['date'],
+            y=fcst_preds[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2, dash='dot'),
+        ))
+
+        # Electricity Generation Curves
+        fcst = combined_fcst[state]
+        curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
+        fcst['date'] = pd.to_datetime(fcst['date'], format='%Y-%m-%d')
+        fcst_historical = fcst[fcst['date'] < curr_quarter_end]
+        fcst_preds = fcst[fcst['date'] >= curr_quarter_end]
+
+        data.append(go.Scatter(
+            name=state,
+            x=fcst_historical['date'],
+            y=fcst_historical[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2),
+            xaxis="x",
+            yaxis="y2"
+        ))
+
+        data.append(go.Scatter(
+            name=state + ' Forecast',
+            x=fcst_preds['date'],
+            y=fcst_preds[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2, dash='dot'),
+            xaxis="x",
+            yaxis="y2"
+        ))
+    layout = dict(
+        width=figsize[0],
+        height=figsize[1],
+        yaxis=dict(
+            # title=ylabel,
+            domain=[0, 0.45]
+        ),
+        yaxis2=dict(
+            domain=[0.55, 1]
+        ),
+        xaxis1=dict(
+            type='date',
+            # TODO clean this area up
+            range=[fcst['date'].min() - pd.DateOffset(months=6),
+                   fcst['date'].max() + pd.DateOffset(months=6)],
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label='1y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=3,
+                         label='3y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=5,
+                         label='5y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=10,
+                         label='10y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(step='all')
+                ])
+            ),
+        ),
+        xaxis2=dict(
+            anchor="y2",
+        ),
+    )
+    return go.Figure(data=data, layout=layout)
+
+
+def plot_multiple_fuels_plus_emissions(gen_fcst, emissions_fcst, fuel_types,
+                           xlabel='ds', ylabel='y', figsize=(900, 700)):
+    fcst = emissions_fcst
+    curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
+    fcst['date'] = pd.to_datetime(fcst['date'], format='%Y-%m-%d')
+    fcst_historical = fcst[fcst['date'] < curr_quarter_end]
+    fcst_preds = fcst[fcst['date'] >= curr_quarter_end]
+
+    data = []
+    for idx, fuel in enumerate(fuel_types):
+        data.append(go.Scatter(
+            name="CO<sub>2</sub>e - " + fuel.title(),
+            x=fcst_historical['date'],
+            y=fcst_historical[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2),
+        ))
+
+        data.append(go.Scatter(
+            name="CO<sub>2</sub>e - " + fuel.title() + ' Forecast',
+            x=fcst_preds['date'],
+            y=fcst_preds[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2, dash='dot'),
+        ))
+
+    # Emissions Curves
+    fcst = gen_fcst
+    curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
+    fcst['date'] = pd.to_datetime(fcst['date'], format='%Y-%m-%d')
+    fcst_historical = fcst[fcst['date'] < curr_quarter_end]
+    fcst_preds = fcst[fcst['date'] >= curr_quarter_end]
+
+    for idx, fuel in enumerate(fuel_types):
+        data.append(go.Scatter(
+            name=fuel.title(),
+            x=fcst_historical['date'],
+            y=fcst_historical[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2),
+            xaxis="x",
+            yaxis="y2"
+        ))
+
+        data.append(go.Scatter(
+            name=fuel.title() + ' Forecast',
+            x=fcst_preds['date'],
+            y=fcst_preds[fuel],
+            # mode='lines+markers',
+            mode='lines',
+            line=dict(color=colors[idx], width=2, dash='dot'),
+            xaxis="x",
+            yaxis="y2"
+        ))
+
+    layout = dict(
+        width=figsize[0],
+        height=figsize[1],
+        yaxis=dict(
+            # title=ylabel,
+            domain=[0, 0.45]
+        ),
+        yaxis2=dict(
+            domain=[0.55, 1]
+        ),
+        xaxis1=dict(
+            type='date',
+            # TODO clean this area up
+            range=[fcst['date'].min() - pd.DateOffset(months=6),
+                   fcst['date'].max() + pd.DateOffset(months=6)],
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label='1y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=3,
+                         label='3y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=5,
+                         label='5y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(count=10,
+                         label='10y',
+                         step='year',
+                         stepmode='backward'),
+                    dict(step='all')
+                ])
+            ),
+        ),
+        xaxis2=dict(
+            anchor="y2",
+        ),
+        # yaxis=dict(
+        #     title=ylabel
+        # ),
+        # xaxis=dict(
+        #     title=xlabel,
+        #     type='date',
+        #     range=[fcst['date'].min() - pd.DateOffset(months=6),
+        #            fcst['date'].max() + pd.DateOffset(months=6)],
+        #     rangeselector=dict(
+        #         buttons=list([
+        #             dict(count=1,
+        #                  label='1y',
+        #                  step='year',
+        #                  stepmode='backward'),
+        #             dict(count=3,
+        #                  label='3y',
+        #                  step='year',
+        #                  stepmode='backward'),
+        #             dict(count=5,
+        #                  label='5y',
+        #                  step='year',
+        #                  stepmode='backward'),
+        #             dict(count=10,
+        #                  label='10y',
+        #                  step='year',
+        #                  stepmode='backward'),
+        #             dict(step='all')
+        #         ])
+        #     ),
+        #     rangeslider=dict(
+        #         visible=True
+        #     ),
+        # ),
+    )
+    return go.Figure(data=data, layout=layout)
+
