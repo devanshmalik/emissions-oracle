@@ -62,6 +62,7 @@ class ModelForecast:
         forecast['y'] = model.history['y'].combine_first(forecast['yhat'])
         return forecast
 
+    # TODO: Combine with save_combined_forecast
     def save_individual_forecast(self, forecast, fuel_type):
         # Create new parent folder for all individual forecasts
         reporting_folder = 'Individual_Forecasts/{}'.format(self.save_folder)
@@ -104,7 +105,24 @@ def create_all_forecasts(eia_api_ids):
     for data_type in eia_api_ids.keys():
         model_forecaster = ModelForecast(data_type=data_type)
         model_forecaster.forecast()
+    combine_all_states_generation()
     log.info("Finished all forecasting")
+
+
+def combine_all_states_generation():
+    """Concatenate all individual state electricity generation CSVs into one"""
+    generation_combined = pd.DataFrame()
+    for state in STATES:
+        df_gen = read_forecast("Net_Gen_By_Fuel_MWh", "combined", state)
+
+        df_gen["state"] = state
+        generation_combined = pd.concat([generation_combined, df_gen], ignore_index=True)
+
+    # Save dataframes as CSV
+    target_folder = 'Combined_Forecasts'
+    file_name = 'Combined-Electricity-Generation-All-States.csv'
+    file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
+    generation_combined.to_csv(file_path, index=False)
 
 
 def read_forecast(data_type, forecast_type, state, fuel_type=None):
@@ -118,15 +136,3 @@ def read_forecast(data_type, forecast_type, state, fuel_type=None):
         file_name = '{}-Combined.csv'.format(data_type)
     file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
     return pd.read_csv(file_path)
-
-
-
-
-# Non-interactive plots
-# fig1 = m.plot(forecast)
-# fig2 = m.plot_components(forecast)
-
-# Interative Plots
-# from prophet.plot import plot_plotly, plot_components_plotly
-# plot_plotly(m, forecast)
-# plot_components_plotly(m, forecast)

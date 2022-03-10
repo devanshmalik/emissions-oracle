@@ -50,7 +50,7 @@ class MultiPage:
             unsafe_allow_html=True,
         )
 
-        st.sidebar.title("Emissions Oracle Application")
+        st.sidebar.title("Emissions Oracle")
         # Dropdown to select the page to run
         page = st.sidebar.selectbox(
             'App Navigation',

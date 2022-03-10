@@ -587,3 +587,21 @@ def plot_multiple_fuels_plus_emissions(gen_fcst, emissions_fcst, fuel_types,
     )
     return go.Figure(data=data, layout=layout)
 
+def plot_map(df, value):
+
+    fig = go.Figure(data=go.Choropleth(
+        locations=df['state'],  # Spatial coordinates
+        z=df[value].astype(float),  # Data to be color-coded
+        locationmode='USA-states',  # set of locations match entries in `locations`
+        colorscale='Reds',
+        colorbar_title="Thousand Metric Tons CO2e",
+    ))
+
+    fig.update_layout(
+        width=900,
+        height=600,
+        title_text='US Total Electricity Generation Emissions by State',
+        geo_scope='usa',  # limite map scope to USA
+    )
+
+    return fig
