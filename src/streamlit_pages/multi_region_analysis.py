@@ -59,10 +59,12 @@ def app():
         emissions_by_states[state] = df_emissions
 
     # Plot Chart
+    ylabel = "Net Generation (Thousand  MWh)" if data_type == "Net_Gen_By_Fuel_MWh" else "Fuel Consumption (million MMBtu)"
     if show_emissions:
-        fig = plot_combined_data_multiple_states(gen_by_states, emissions_by_states, chosen_fuel)
+        fig = plot_combined_data_multiple_states(gen_by_states, emissions_by_states, chosen_fuel,
+                                                 ylabel=ylabel)
     else:
-        fig = plot_multiple_states(gen_by_states, chosen_fuel)
+        fig = plot_multiple_states(gen_by_states, chosen_fuel, ylabel=ylabel)
     st.plotly_chart(fig)
 
     # Chart 2 Data and Plotting
@@ -73,7 +75,10 @@ def app():
         emissions['date'] = pd.to_datetime(emissions['date'], format='%Y-%m-%d')
         emissions = emissions.resample(time_unit, on='date').mean().reset_index()
         emissions_by_states[state] = emissions
-    fig = plot_multiple_states(emissions_by_states, "emissions_intensity")
+
+    ylabel = "Emissions Intensity (kg CO<sub>2</sub>e per kWh)"
+    fig = plot_multiple_states(emissions_by_states, "emissions_intensity",
+                               ylabel=ylabel)
     st.plotly_chart(fig)
 
 

@@ -1,5 +1,10 @@
 import pandas as pd
 import streamlit as st
+import json
+
+from prophet.serialize import model_from_json
+from prophet.plot import plot_components_plotly
+
 
 from src.d00_utils.const import *
 from src.d00_utils.utils import get_filepath, load_yml, load_config
@@ -60,14 +65,49 @@ def app():
         if show_emissions:
             emissions_df = read_emissions("total", chosen_state)
             emissions_df = aggregate_by_date(emissions_df, time_unit)
-            fig = plot_combined_data_multiple_fuels(gen_by_fuels, emissions_df, chosen_fuel_multi)
+
+            # Chart Elements
+            title = "CO<sub>2</sub> Equivalent Emissions for Specified Generation"
+            ylabel = "Net Generation (Thousand  MWh)" if data_type == "Net_Gen_By_Fuel_MWh" else "Fuel Consumption (million MMBtu)"
+            fig = plot_combined_data_multiple_fuels(gen_by_fuels, emissions_df, chosen_fuel_multi,
+                                                    title=title, ylabel=ylabel)
         else:
-            fig = plot_multiple_fuels(gen_by_fuels, chosen_fuel_multi)
+            title, ylabel = get_chart_labels(chosen_fuel, chosen_state, data_type)
+            fig = plot_multiple_fuels(gen_by_fuels,
+                                      chosen_fuel_multi, title=title, ylabel=ylabel)
     else:
         gen_by_chosen_fuel = read_forecast(data_type, 'individual', chosen_state, chosen_fuel)
         gen_by_chosen_fuel = aggregate_by_date(gen_by_chosen_fuel, time_unit, "ds")
-        fig = plot_prophet_forecast(gen_by_chosen_fuel)
+
+        title, ylabel = get_chart_labels(chosen_fuel, chosen_state, data_type)
+        title = title + " - {}".format(chosen_fuel.title())
+        fig = plot_prophet_forecast(gen_by_chosen_fuel, title=title, ylabel=ylabel)
     st.plotly_chart(fig)
+
+    # Chart 2 Data and Plotting
+    st.write("## Impact of Components in Forecast")
+    # Get model and forecast
+    save_folder = '{}/{}'.format(data_type, chosen_state)
+    models_file_name = '{}-{}.{}'.format(data_type, chosen_fuel, 'json')
+    models_file_path = get_filepath(MODELS_FOLDER, save_folder, models_file_name)
+    with open(models_file_path, 'r') as fin:
+        model = model_from_json(json.load(fin))
+    forecast = read_forecast(data_type, 'individual', chosen_state, chosen_fuel)
+
+    # Plot components
+    forecast['ds'] = pd.to_datetime(forecast['ds'], format='%Y-%m-%d')
+    fig = plot_components_plotly(model, forecast)
+    st.plotly_chart(fig)
+
+
+def get_chart_labels(chosen_fuel, chosen_state, data_type):
+    if data_type == "Net_Gen_By_Fuel_MWh":
+        title = "Net Electricity Generation - {}".format(chosen_state)
+        ylabel = "Net Generation (Thousand  MWh)"
+    else:
+        title = "Total Fuel Consumption - {}".format(chosen_state)
+        ylabel = "Fuel Consumption (million MMBtu)"
+    return title, ylabel
 
 
 def aggregate_by_date(df, time_unit, date_var="date"):

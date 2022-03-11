@@ -16,14 +16,15 @@ from matplotlib.dates import (
     AutoDateLocator,
     AutoDateFormatter,
 )
-from matplotlib.ticker import FuncFormatter
-import plotly.express as px
-from plotly.subplots import make_subplots
 
 import plotly.graph_objects as go
 
 from pandas.plotting import deregister_matplotlib_converters
 deregister_matplotlib_converters()
+
+import plotly.io as pio
+
+pio.templates.default = "simple_white"
 
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -41,56 +42,10 @@ colors = [
     '#bcbd22',  # curry yellow-green
     '#17becf'  # blue-teal
 ]
-
-def plot(
-    fcst, ax=None, uncertainty=True, plot_cap=True, xlabel='ds', ylabel='y',
-    figsize=(10, 6), include_legend=True
-):
-    """Plot the Prophet forecast.
-    Parameters
-    ----------
-    m: Prophet model.
-    fcst: pd.DataFrame output of m.predict.
-    ax: Optional matplotlib axes on which to plot.
-    uncertainty: Optional boolean to plot uncertainty intervals, which will
-        only be done if m.uncertainty_samples > 0.
-    plot_cap: Optional boolean indicating if the capacity should be shown
-        in the figure, if available.
-    xlabel: Optional label name on X-axis
-    ylabel: Optional label name on Y-axis
-    figsize: Optional tuple width, height in inches.
-    include_legend: Optional boolean to add legend to the plot.
-    Returns
-    -------
-    A matplotlib figure.
-    """
-    fig = plt.figure(facecolor='w', figsize=figsize)
-    ax = fig.add_subplot(111)
-
-    fcst['ds'] = pd.to_datetime(fcst['ds'], format='%Y-%m-%d')
-
-    fcst_t = fcst['ds'].dt.to_pydatetime()
-    ax.plot(fcst['ds'].dt.to_pydatetime(), fcst['y'], 'k.',
-            label='Observed data points')
-    ax.plot(fcst_t, fcst['yhat'], ls='-', c='#0072B2', label='Forecast')
-
-    ax.fill_between(fcst_t, fcst['yhat_lower'], fcst['yhat_upper'],
-                    color='#0072B2', alpha=0.2, label='Uncertainty interval')
-    # Specify formatting to workaround matplotlib issue #12925
-    locator = AutoDateLocator(interval_multiples=False)
-    formatter = AutoDateFormatter(locator)
-    ax.xaxis.set_major_locator(locator)
-    ax.xaxis.set_major_formatter(formatter)
-    ax.grid(True, which='major', c='gray', ls='-', lw=1, alpha=0.2)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    if include_legend:
-        ax.legend()
-    fig.tight_layout()
-    return fig
+# PLOTLY_TEMPLATE = "seaborn"
 
 
-def plot_prophet_forecast(fcst, xlabel='ds', ylabel='y', figsize=(900, 600)):
+def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
     """Plot the Prophet forecast with actual and prediction values.
     The plot shows the uncertainty ranges for each prediction.
 
@@ -108,10 +63,9 @@ def plot_prophet_forecast(fcst, xlabel='ds', ylabel='y', figsize=(900, 600)):
     A Plotly Figure.
     """
     # Formatting
-    prediction_color = '#0072B2'
+    prediction_color = '#1f77b4'
     error_color = 'rgba(0, 114, 178, 0.2)'  # '#0072B2' with 0.2 opacity
     actual_color = 'black'
-    trend_color = '#B23B00'
     line_width = 2
     marker_size = 4
 
@@ -157,6 +111,7 @@ def plot_prophet_forecast(fcst, xlabel='ds', ylabel='y', figsize=(900, 600)):
     ))
 
     layout = dict(
+        title=title,
         width=figsize[0],
         height=figsize[1],
         yaxis=dict(
@@ -165,8 +120,8 @@ def plot_prophet_forecast(fcst, xlabel='ds', ylabel='y', figsize=(900, 600)):
         xaxis=dict(
             title=xlabel,
             type='date',
-            range=[fcst['ds'].min() - pd.DateOffset(months=6),
-                   fcst['ds'].max() + pd.DateOffset(months=6)],
+            range=[pd.to_datetime('2001-03-31') - pd.DateOffset(months=6),
+                   pd.to_datetime('2025-12-31') + pd.DateOffset(months=6)],
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
@@ -197,7 +152,7 @@ def plot_prophet_forecast(fcst, xlabel='ds', ylabel='y', figsize=(900, 600)):
     return fig
 
 
-def plot_multiple_fuels(df, multiple_fuels, xlabel='ds', ylabel='y', figsize=(900, 600)):
+def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
     df_historical = df[df['date'] < curr_quarter_end]
     df_forecast = df[df['date'] >= curr_quarter_end]
@@ -221,6 +176,7 @@ def plot_multiple_fuels(df, multiple_fuels, xlabel='ds', ylabel='y', figsize=(90
         ))
 
     layout = dict(
+        title=title,
         width=figsize[0],
         height=figsize[1],
         yaxis=dict(
@@ -229,8 +185,8 @@ def plot_multiple_fuels(df, multiple_fuels, xlabel='ds', ylabel='y', figsize=(90
         xaxis=dict(
             title=xlabel,
             type='date',
-            range=[df['date'].min() - pd.DateOffset(months=6),
-                   df['date'].max() + pd.DateOffset(months=6)],
+            range=[pd.to_datetime('2001-03-31') - pd.DateOffset(months=6),
+                   pd.to_datetime('2025-12-31') + pd.DateOffset(months=6)],
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
@@ -260,7 +216,8 @@ def plot_multiple_fuels(df, multiple_fuels, xlabel='ds', ylabel='y', figsize=(90
     return go.Figure(data=data, layout=layout)
 
 
-def plot_multiple_states(fcst_by_states, filter_col, xlabel='ds', ylabel='y', figsize=(900, 600)):
+def plot_multiple_states(fcst_by_states, filter_col,
+                         title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
     data = []
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
     for idx, (state, df) in enumerate(fcst_by_states.items()):
@@ -284,6 +241,7 @@ def plot_multiple_states(fcst_by_states, filter_col, xlabel='ds', ylabel='y', fi
         ))
 
     layout = dict(
+        title=title,
         width=figsize[0],
         height=figsize[1],
         yaxis=dict(
@@ -292,8 +250,8 @@ def plot_multiple_states(fcst_by_states, filter_col, xlabel='ds', ylabel='y', fi
         xaxis=dict(
             title=xlabel,
             type='date',
-            range=[df['date'].min() - pd.DateOffset(months=6),
-                   df['date'].max() + pd.DateOffset(months=6)],
+            range=[pd.to_datetime('2001-03-31') - pd.DateOffset(months=6),
+                   pd.to_datetime('2025-12-31') + pd.DateOffset(months=6)],
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
@@ -324,7 +282,7 @@ def plot_multiple_states(fcst_by_states, filter_col, xlabel='ds', ylabel='y', fi
 
 
 def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
-                                       xlabel='ds', ylabel='y', figsize=(900, 700)):
+                                       xlabel='Time', ylabel='y', figsize=(900, 700)):
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
     data = []
     for idx, (state, df) in enumerate(emissions_by_states.items()):
@@ -377,16 +335,18 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
         width=figsize[0],
         height=figsize[1],
         yaxis=dict(
-            # title=ylabel,
+            title="Emissions (Thousand metric tons CO<sub>2</sub>eq)",
             domain=[0, 0.45]
         ),
         yaxis2=dict(
+            title=ylabel,
             domain=[0.55, 1]
         ),
         xaxis1=dict(
+            title=xlabel,
             type='date',
-            range=[df['date'].min() - pd.DateOffset(months=6),
-                   df['date'].max() + pd.DateOffset(months=6)],
+            range=[pd.to_datetime('2001-03-31') - pd.DateOffset(months=6),
+                   pd.to_datetime('2025-12-31') + pd.DateOffset(months=6)],
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
@@ -417,7 +377,7 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
 
 
 def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
-                                      xlabel='ds', ylabel='y', figsize=(900, 700)):
+                                      title="", xlabel='Time', ylabel='y', figsize=(900, 700)):
     data = []
 
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
@@ -466,20 +426,22 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
         ))
 
     layout = dict(
+        title=title,
         width=figsize[0],
         height=figsize[1],
         yaxis=dict(
-            # title=ylabel,
+            title="Emissions (Thousand metric tons CO<sub>2</sub>eq)",
             domain=[0, 0.45]
         ),
         yaxis2=dict(
+            title=ylabel,
             domain=[0.55, 1]
         ),
         xaxis1=dict(
+            title=xlabel,
             type='date',
-            # TODO clean this area up
-            range=[df_generation['date'].min() - pd.DateOffset(months=6),
-                   df_generation['date'].max() + pd.DateOffset(months=6)],
+            range=[pd.to_datetime('2001-03-31') - pd.DateOffset(months=6),
+                   pd.to_datetime('2025-12-31') + pd.DateOffset(months=6)],
             rangeselector=dict(
                 buttons=list([
                     dict(count=1,
@@ -503,25 +465,27 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
             ),
         ),
         xaxis2=dict(
+
             anchor="y2",
         ),
     )
     return go.Figure(data=data, layout=layout)
 
 
-def plot_map(df, filter_col):
+def plot_map(df, filter_col, colorbar_title, title):
     fig = go.Figure(data=go.Choropleth(
         locations=df['state'],  # Spatial coordinates
         z=df[filter_col].astype(float),  # Data to be color-coded
         locationmode='USA-states',  # set of locations match entries in `locations`
-        colorscale='Reds',
-        colorbar_title="Thousand Metric Tons CO2e",
+        colorscale='YlOrRd',
+        colorbar_title=colorbar_title,
     ))
 
     fig.update_layout(
+        template="seaborn",
         width=900,
         height=600,
-        title_text='US Total Electricity Generation Emissions by State',
+        title_text=title,
         geo_scope='usa',  # limited map scope to USA
     )
 

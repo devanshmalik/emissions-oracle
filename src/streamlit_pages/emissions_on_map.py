@@ -37,14 +37,24 @@ def app():
 
         # Aggregate by state and time unit (mean aggregation for emissions intensity)
         df = df.groupby([pd.Grouper(key='date', freq="Y"), 'state']).mean().reset_index()
-        fig = plot_map(df[df['date'].dt.year == chosen_year], "emissions_intensity")
+        data = df[df['date'].dt.year == chosen_year]
+
+        # Chart Elements + Plot
+        title = "Electricity Generation Emissions Intensity by State"
+        colorbar_title = "kg CO<sub>2</sub>e per kWh"
+        fig = plot_map(data, "emissions_intensity", colorbar_title=colorbar_title, title=title)
     else:
         file_name = 'Combined-CO2e-Total-Emissions.csv'
         df = get_emissions_data(file_name)
 
         # Aggregate by state and time unit (sum aggregation for total emissions)
         df = df.groupby([pd.Grouper(key='date', freq="Y"), 'state']).sum().reset_index()
-        fig = plot_map(df[df['date'].dt.year == chosen_year], chosen_fuel)
+        data = df[df['date'].dt.year == chosen_year]
+
+        # Chart Elements + Plot
+        title = "Electricity Generation Emissions by State - {}".format(chosen_fuel.title())
+        colorbar_title = "Thousand metric tons CO<sub>2</sub>e"
+        fig = plot_map(data, chosen_fuel, colorbar_title=colorbar_title, title=title)
     st.plotly_chart(fig)
 
 
