@@ -19,3 +19,4 @@ sklearn
 streamlit
 requests
 matplotlib
+streamlit-aggrid

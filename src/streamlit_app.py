@@ -1,11 +1,9 @@
 import os
 import streamlit as st
-import numpy as np
-from PIL import  Image
 
 # Custom imports
 from streamlit_pages.multipage import MultiPage
-from streamlit_pages import total_net_gen, test_page
+from streamlit_pages import emissions_on_map,  single_region_analysis, multi_region_analysis
 
 # Create an instance of the app
 app = MultiPage()
@@ -13,8 +11,9 @@ app = MultiPage()
 st.set_page_config(page_title="Emissions Oracle", layout="wide")
 
 # Add all your application here
-app.add_page("Total Net Generation", total_net_gen.app)
-app.add_page("Change Metadata", test_page.app)
+app.add_page("Single Region Analysis", single_region_analysis.app)
+app.add_page("Multi Region Analysis", multi_region_analysis.app)
+app.add_page("Emissions on USA Map", emissions_on_map.app)
 
 # The main app
 app.run()

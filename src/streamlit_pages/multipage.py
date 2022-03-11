@@ -39,11 +39,11 @@ class MultiPage:
             """
             <style>
             [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
-                width: 300px;
+                width: 325px;
             }
             [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
-                width: 300px;
-                margin-left: -300px;
+                width: 325px;
+                margin-left: -325px;
             }
             </style>
             """,
