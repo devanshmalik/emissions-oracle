@@ -16,50 +16,48 @@ from src.d06_visualization.plot import (
     plot_combined_data_multiple_fuels,
 )
 
-EIA_API_IDS = load_yml(EIA_API_IDS_YML_FILEPATH)
-
 
 def app():
     config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
     # Set up sidebar options
-    st.sidebar.title("1. Filters")
+    st.sidebar.title("Filters")
     chosen_data_type = st.sidebar.radio(
         "Select the type of data to analyze.",
         options=["Net Electricity Generation (MWh)", "Electricity Fuel Consumption (BTU)"],
-        help="Add details here."
+        help=config["tooltips"]["data_type_choice"]
     )
     data_type = 'Net_Gen_By_Fuel_MWh' if chosen_data_type == "Net Electricity Generation (MWh)" else "Fuel_Consumption_BTU"
     fuel_options = config["data_types"][data_type]["fuels"]
 
     chosen_state = st.sidebar.selectbox('Pick a region to visualize', STATES)
-    show_all_fuels_toggle = st.sidebar.checkbox(
-        "Show All Fuels on Chart", value=False, help="Add a help message here."
+    show_all_sources_toggle = st.sidebar.checkbox(
+        "Show Generation Sources Separately", value=False, help=config["tooltips"]["show_all_sources_choice"]
     )
     chosen_fuel = st.sidebar.selectbox(
-        "Pick a fuel type", options=fuel_options, disabled=show_all_fuels_toggle
+        "Pick a generation type", options=fuel_options, disabled=show_all_sources_toggle,
     )
     time_units_mapping = {"Quarter": "Q", "Year": "Y"}
     chosen_time_unit = st.sidebar.radio(
         "Select the time unit to view data by.",
         options=["Quarter", "Year"],
-        help="Suggest a time frame depending on model (probably quarterly)"
+        help=config["tooltips"]["time_unit_choice"]
     )
     time_unit = time_units_mapping[chosen_time_unit]
 
     # Main Chart Options
     # TODO: Add documentation on what this analysis is and guide on how to use it
-    chosen_fuel_multi = st.multiselect(
-        'Pick multiple fuels to compare.', options=fuel_options, default=fuel_options[0],
-        disabled=not show_all_fuels_toggle, help="Only available when 'Show All Fuels on Chart' is checked"
+    chosen_sources_multi = st.multiselect(
+        'Pick multiple generation sources to compare.', options=fuel_options, default=fuel_options[0],
+        disabled=not show_all_sources_toggle, help=config["tooltips"]["multi_sources_choice"]
     )
     show_emissions = st.checkbox(
-        "Show CO2e Emissions", value=False,
-        help="Only available when 'Show All Fuels on Chart' is checked", disabled=not show_all_fuels_toggle
+        "Show Greenhouse Gas Emissions", value=False,
+        disabled=not show_all_sources_toggle, help=config["tooltips"]["show_emissions_choice"]
     )
 
     # Get Data and Plot
-    if show_all_fuels_toggle:
+    if show_all_sources_toggle:
         gen_by_fuels = read_forecast(data_type, 'combined', chosen_state, chosen_fuel)
         gen_by_fuels = aggregate_by_date(gen_by_fuels, time_unit)
         if show_emissions:
@@ -69,12 +67,12 @@ def app():
             # Chart Elements
             title = "CO<sub>2</sub> Equivalent Emissions for Specified Generation"
             ylabel = "Net Generation (Thousand  MWh)" if data_type == "Net_Gen_By_Fuel_MWh" else "Fuel Consumption (million MMBtu)"
-            fig = plot_combined_data_multiple_fuels(gen_by_fuels, emissions_df, chosen_fuel_multi,
+            fig = plot_combined_data_multiple_fuels(gen_by_fuels, emissions_df, chosen_sources_multi,
                                                     title=title, ylabel=ylabel)
         else:
             title, ylabel = get_chart_labels(chosen_fuel, chosen_state, data_type)
             fig = plot_multiple_fuels(gen_by_fuels,
-                                      chosen_fuel_multi, title=title, ylabel=ylabel)
+                                      chosen_sources_multi, title=title, ylabel=ylabel)
     else:
         gen_by_chosen_fuel = read_forecast(data_type, 'individual', chosen_state, chosen_fuel)
         gen_by_chosen_fuel = aggregate_by_date(gen_by_chosen_fuel, time_unit, "ds")

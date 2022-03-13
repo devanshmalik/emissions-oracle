@@ -24,7 +24,8 @@ EMISSIONS_FACTORS_YML_FILEPATH = os.path.join(PREFIX, 'conf/base/emissions_facto
 STATES_YML_FILEPATH = os.path.join(PREFIX, 'conf/base/states.yml')
 STREAMLIT_CONFIG_FILEPATH = os.path.join(PREFIX, 'conf/base/config_streamlit.toml')
 
-STATES = load_yml(STATES_YML_FILEPATH)
+# Only send full names of states to functions
+STATES = list(load_yml(STATES_YML_FILEPATH).keys())
 
 
 

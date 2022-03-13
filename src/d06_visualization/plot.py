@@ -1,27 +1,8 @@
 import os
 import logging
 import pandas as pd
-import yaml
-from prophet import Prophet
-import json
-from prophet.serialize import model_from_json
-
-from src.d00_utils.const import *
-from src.d00_utils.utils import get_filepath
-
-from matplotlib import pyplot as plt
-from matplotlib.dates import (
-    MonthLocator,
-    num2date,
-    AutoDateLocator,
-    AutoDateFormatter,
-)
 
 import plotly.graph_objects as go
-
-from pandas.plotting import deregister_matplotlib_converters
-deregister_matplotlib_converters()
-
 import plotly.io as pio
 
 pio.templates.default = "simple_white"
@@ -30,7 +11,7 @@ log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 # Formatting
-colors = [
+COLORS = [
     '#1f77b4',  # muted blue
     '#ff7f0e',  # safety orange
     '#2ca02c',  # cooked asparagus green
@@ -40,9 +21,8 @@ colors = [
     '#e377c2',  # raspberry yogurt pink
     '#7f7f7f',  # middle gray
     '#bcbd22',  # curry yellow-green
-    '#17becf'  # blue-teal
+    '#17becf',  # blue-teal
 ]
-# PLOTLY_TEMPLATE = "seaborn"
 
 
 def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
@@ -164,7 +144,7 @@ def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y',
             x=df_historical['date'],
             y=df_historical[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2),
+            line=dict(color=COLORS[idx], width=2),
         ))
 
         data.append(go.Scatter(
@@ -172,7 +152,7 @@ def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y',
             x=df_forecast['date'],
             y=df_forecast[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2, dash='dot'),
+            line=dict(color=COLORS[idx], width=2, dash='dot'),
         ))
 
     layout = dict(
@@ -229,7 +209,7 @@ def plot_multiple_states(fcst_by_states, filter_col,
             x=df_historical['date'],
             y=df_historical[filter_col],
             mode='lines',
-            line=dict(color=colors[idx], width=2),
+            line=dict(color=COLORS[idx], width=2),
         ))
 
         data.append(go.Scatter(
@@ -237,7 +217,7 @@ def plot_multiple_states(fcst_by_states, filter_col,
             x=df_forecast['date'],
             y=df_forecast[filter_col],
             mode='lines',
-            line=dict(color=colors[idx], width=2, dash='dot'),
+            line=dict(color=COLORS[idx], width=2, dash='dot'),
         ))
 
     layout = dict(
@@ -291,19 +271,19 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
         emissions_preds = df[df['date'] >= curr_quarter_end]
 
         data.append(go.Scatter(
-            name="CO<sub>2</sub>e - " + state,
+            name="CO<sub>2</sub>eq - " + state,
             x=emissions_historical['date'],
             y=emissions_historical[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2),
+            line=dict(color=COLORS[idx], width=2),
         ))
 
         data.append(go.Scatter(
-            name="CO<sub>2</sub>e - " + state + ' Forecast',
+            name="CO<sub>2</sub>eq - " + state + ' Forecast',
             x=emissions_preds['date'],
             y=emissions_preds[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2, dash='dot'),
+            line=dict(color=COLORS[idx], width=2, dash='dot'),
         ))
 
         # Electricity Generation Curves
@@ -316,7 +296,7 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
             x=gen_historical['date'],
             y=gen_historical[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2),
+            line=dict(color=COLORS[idx], width=2),
             xaxis="x",
             yaxis="y2"
         ))
@@ -326,7 +306,7 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
             x=gen_preds['date'],
             y=gen_preds[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2, dash='dot'),
+            line=dict(color=COLORS[idx], width=2, dash='dot'),
             xaxis="x",
             yaxis="y2"
         ))
@@ -386,19 +366,19 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
     # Append Emissions Curves
     for idx, fuel in enumerate(fuel_types):
         data.append(go.Scatter(
-            name="CO<sub>2</sub>e - " + fuel.title(),
+            name="CO<sub>2</sub>eq - " + fuel.title(),
             x=emissions_historical['date'],
             y=emissions_historical[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2),
+            line=dict(color=COLORS[idx], width=2),
         ))
 
         data.append(go.Scatter(
-            name="CO<sub>2</sub>e - " + fuel.title() + ' Forecast',
+            name="CO<sub>2</sub>eq - " + fuel.title() + ' Forecast',
             x=emissions_preds['date'],
             y=emissions_preds[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2, dash='dot'),
+            line=dict(color=COLORS[idx], width=2, dash='dot'),
         ))
 
     # Generation Curves
@@ -410,7 +390,7 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
             x=gen_historical['date'],
             y=gen_historical[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2),
+            line=dict(color=COLORS[idx], width=2),
             xaxis="x",
             yaxis="y2"
         ))
@@ -420,7 +400,7 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
             x=gen_preds['date'],
             y=gen_preds[fuel],
             mode='lines',
-            line=dict(color=colors[idx], width=2, dash='dot'),
+            line=dict(color=COLORS[idx], width=2, dash='dot'),
             xaxis="x",
             yaxis="y2"
         ))

@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class ModelTrainer:
     # TODO: Pull directly from config instead of hard coding in script
-    net_gen_fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear',
+    net_gen_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear',
                      'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']
     """Class to train Facebook Prophet models"""
@@ -33,12 +33,10 @@ class ModelTrainer:
             else:
                 raise ValueError(f"Unexpected EIA Data Type encountered: {self.data_type}")
 
-            log.info(f"Training models for Category: {self.data_type}")
             for fuel_type in fuel_types:
                 df = self.read_processed_data(fuel_type)
                 model = self.fit_model(df)
                 self.save_model(model, fuel_type)
-            log.info(f"Finished models for State: {state}")
 
     def read_processed_data(self, fuel_type):
         """
@@ -69,6 +67,7 @@ class ModelTrainer:
 def train_all_models(eia_api_ids):
     log.info("Training and Saving Prophet Models...")
     for data_type in eia_api_ids.keys():
+        log.info(f"Training models for Category: {data_type}")
         model_trainer = ModelTrainer(data_type=data_type)
         model_trainer.train_models()
     log.info("Finished training Prophet models.")

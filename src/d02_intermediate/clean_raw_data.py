@@ -96,6 +96,7 @@ class DataCleaner:
 
     def clean_data(self):
         for state in STATES:
+            log.info(f"Cleaning raw data for {state}")
             # Folder for each state's data
             self.save_folder = '{}/{}'.format(self.data_type, state)
 
@@ -108,6 +109,7 @@ class DataCleaner:
 
 def clean_all_data(eia_api_ids):
     for data_type, api_ids_dict in eia_api_ids.items():
+        log.info(f"Cleaning raw data for {data_type}")
         data_cleaner = DataCleaner(api_ids_dict=api_ids_dict, data_type=data_type)
         data_cleaner.clean_data()
 

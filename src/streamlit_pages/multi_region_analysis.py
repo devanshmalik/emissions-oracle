@@ -2,29 +2,21 @@ import pandas as pd
 import streamlit as st
 
 from src.d00_utils.const import *
-from src.d00_utils.utils import get_filepath, load_yml, load_config
+from src.d00_utils.utils import load_yml, load_config
 from src.d06_reporting.create_forecasts import read_forecast
 from src.d06_reporting.calculate_emissions import read_emissions
-from src.d06_visualization.plot import (
-    plot_prophet_forecast,
-    plot_multiple_fuels,
-    plot_combined_data_multiple_fuels,
-    plot_multiple_states,
-    plot_combined_data_multiple_states,
-)
-
-EIA_API_IDS = load_yml(EIA_API_IDS_YML_FILEPATH)
+from src.d06_visualization.plot import plot_multiple_states, plot_combined_data_multiple_states
 
 
 def app():
     config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
     # Set up sidebar options
-    st.sidebar.title("1. Filters")
+    st.sidebar.title("Filters")
     chosen_data_type = st.sidebar.radio(
         "Select the type of data to analyze.",
         options=["Net Electricity Generation (MWh)", "Electricity Fuel Consumption (BTU)"],
-        help="Add details here."
+        help=config["tooltips"]["data_type_choice"]
     )
     data_type = 'Net_Gen_By_Fuel_MWh' if chosen_data_type == "Net Electricity Generation (MWh)" else "Fuel_Consumption_BTU"
     fuel_options = config["data_types"][data_type]["fuels"]
@@ -32,18 +24,17 @@ def app():
     time_units_mapping = {"Quarter": "Q", "Year": "Y"}
     chosen_time_unit = st.sidebar.radio(
         "Select the time unit to view data by.",
-        options=["Quarter", "Year"],
-        help="Suggest a time frame depending on model (probably quarterly)"
+        options=["Quarter", "Year"]
     )
     time_unit = time_units_mapping[chosen_time_unit]
 
     chosen_states_multi = st.sidebar.multiselect('Pick regions to compare.', options=STATES, default=STATES[0])
 
     # Chart 1 Options
-    st.write("## Generation & Emissions Across Regions")
-    chosen_fuel = st.selectbox("Pick a fuel type", options=fuel_options)
+    st.write("## Electricity Generation & Emissions Across Regions")
+    chosen_fuel = st.selectbox("Pick a generation type", options=fuel_options)
     show_emissions = st.checkbox(
-        "Show CO2e Emissions", value=False
+        "Show Greenhouse Gas Emissions", value=False, help=config["tooltips"]["show_emissions_multi_region"]
     )
 
     # Get Data for Chart 1

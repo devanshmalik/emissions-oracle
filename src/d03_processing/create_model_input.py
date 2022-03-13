@@ -18,6 +18,7 @@ class DataPreprocessor:
 
     def process_data(self):
         for state in STATES:
+            log.info(f"Processing intermediate data for {state}")
             self.save_folder = '{}/{}'.format(self.data_type, state)
 
             if self.data_type == 'Net_Gen_By_Fuel_MWh':
@@ -54,7 +55,7 @@ class DataPreprocessor:
 
     def process_net_gen_data(self):
         # No processing needed for most fuels
-        no_processing_fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear',
+        no_processing_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear',
                                'hydro', 'wind', 'solar_all']
         for fuel_type in no_processing_fuels:
             df = self.read_input_data(fuel_type)
@@ -82,5 +83,6 @@ class DataPreprocessor:
 
 def process_all_data(eia_api_ids):
     for data_type, api_ids_dict in eia_api_ids.items():
+        log.info(f"Processing intermediate data for {data_type}")
         data_process = DataPreprocessor(api_ids_dict=api_ids_dict, data_type=data_type)
         data_process.process_data()

@@ -21,7 +21,6 @@ class EmissionsCalculator:
         self.save_folder = ""
 
     def calculate_total_emissions(self):
-        log.info("Calculating Total Emissions for all states")
         for state in STATES:
             df = self.create_empty_dataframe(state)
             for data_type, emissions_dict in self.emission_factors.items():
@@ -38,7 +37,7 @@ class EmissionsCalculator:
                             df[col] += emissions_dict[col] * fcst[col]
 
             # Sum all columns except first which is date to calculate total emissions
-            df["all_fuels"] = df.iloc[:, 1:].sum(axis=1)
+            df["all_sources"] = df.iloc[:, 1:].sum(axis=1)
             self.save_emissions(df, "total", state)
         log.info("Completed calculating total emissions for all states.")
 
@@ -61,7 +60,7 @@ class EmissionsCalculator:
             # Create emissions intensity dataframe
             df = pd.DataFrame()
             df['date'] = generation_fcst['date']
-            df['emissions_intensity'] = emissions_fcst["all_fuels"] / generation_fcst["all_fuels"]
+            df['emissions_intensity'] = emissions_fcst["all_sources"] / generation_fcst["all_sources"]
 
             self.save_emissions(df, "intensity", state)
         log.info("Completed calculating emissions intensity for all states.")

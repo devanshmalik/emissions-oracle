@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 class ModelForecast:
     """Class to create forecasts based on models trained earlier"""
     # TODO: Pull directly from config instead of hard coding in script
-    net_gen_fuels = ['all_fuels', 'coal', 'natural_gas', 'nuclear',
+    net_gen_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear',
                      'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']
     """Class to train Facebook Prophet models"""
@@ -25,7 +25,6 @@ class ModelForecast:
         self.save_folder = ""
 
     def forecast(self):
-        log.info(f"Starting forecasting for {self.data_type}")
         for state in STATES:
             log.info(f"Forecasting for State: {state}")
             self.save_folder = '{}/{}'.format(self.data_type, state)
@@ -39,7 +38,6 @@ class ModelForecast:
 
             self.generate_individual_forecasts(fuel_types, state)
             self.combine_forecasts(fuel_types, state)
-            log.info(f"Completed {self.data_type} forecasting for State: {state}")
 
     def generate_individual_forecasts(self, fuel_types, state):
         for fuel_type in fuel_types:
@@ -74,7 +72,7 @@ class ModelForecast:
 
     def combine_forecasts(self, fuel_types, state):
         df_combined = pd.DataFrame()
-        # TODO: Do not add all_fuels to dataframe
+        # TODO: Do not add all_sources to dataframe
         for fuel in fuel_types:
             forecast = self.read_forecast(fuel)
             if 'date' not in df_combined.columns:
@@ -103,6 +101,7 @@ class ModelForecast:
 def create_all_forecasts(eia_api_ids):
     log.info("Creating forecasts for all Prophet Models...")
     for data_type in eia_api_ids.keys():
+        log.info(f"Creating forecasts for Category: {data_type}")
         model_forecaster = ModelForecast(data_type=data_type)
         model_forecaster.forecast()
     combine_all_states_generation()

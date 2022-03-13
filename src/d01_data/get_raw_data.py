@@ -46,18 +46,21 @@ class EIADataPull:
             json.dump(response.json(), f, ensure_ascii=False, indent=4)
 
     def load_data(self):
-        for state in STATES:
-            self.save_folder = '{}/{}'.format(self.data_type, state)
+        states = load_yml(STATES_YML_FILEPATH)
+        for state_name, state_code in states.items():
+            log.info(f"Loading raw data for {state_name}")
+            self.save_folder = '{}/{}'.format(self.data_type, state_name)
 
             for fuel_type, api_id in self.api_ids_dict.items():
                 # Pull and save JSON raw data using EIA API
                 file_name = '{}-{}.json'.format(self.data_type, fuel_type)
-                response = self.request_data(api_id, state)
+                response = self.request_data(api_id, state_code)
                 self.save_data(response, file_name)
 
 
 def load_all_data(eia_api_ids):
     for data_type, api_ids_dict in eia_api_ids.items():
+        log.info(f"Loading raw data for {data_type}")
         eia_data_pull = EIADataPull(api_ids_dict=api_ids_dict, data_type=data_type)
         eia_data_pull.load_data()
 

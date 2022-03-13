@@ -1,5 +1,5 @@
 Net_Gen_By_Fuel_MWh:
-    all_fuels: 'ELEC.GEN.ALL-{}-99.Q'
+    all_sources: 'ELEC.GEN.ALL-{}-99.Q'
     coal: 'ELEC.GEN.COW-{}-99.Q'
     natural_gas: 'ELEC.GEN.NG-{}-99.Q'
     nuclear: 'ELEC.GEN.NUC-{}-99.Q'

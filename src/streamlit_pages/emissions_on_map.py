@@ -5,16 +5,15 @@ from src.d00_utils.const import *
 from src.d00_utils.utils import get_filepath, load_yml, load_config
 from src.d06_visualization.plot import plot_map
 
-EIA_API_IDS = load_yml(EIA_API_IDS_YML_FILEPATH)
-
 
 def app():
     config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
     # Set up sidebar options
     emissions_type = st.sidebar.radio("Select the type of emissions data.",
-                              options=["Emissions Intensity", "Total Emissions"],
-                              help="Add details here")
+                                      options=["Emissions Intensity", "Total Emissions"],
+                                      help=config["tooltips"]["emissions_type_choice"]
+                                      )
 
     # Main Chart Options
     fuel_options = config["data_types"]["Net_Gen_By_Fuel_MWh"]["fuels"]
@@ -27,8 +26,11 @@ def app():
         max_value=2025,
     )
     chosen_fuel = col2.selectbox("Pick a fuel type",
-                                 options=fuel_options, help="Only available for Total Emissions",
+                                 options=fuel_options, help=config["tooltips"]["source_choice_for_map"],
                                  disabled=turn_off_widget)
+
+    if chosen_year >= 2022:
+        st.write("**Note**: Viewing Forecasted Emissions!")
 
     # Get Data and Plot Chart
     if emissions_type == "Emissions Intensity":
@@ -38,6 +40,10 @@ def app():
         # Aggregate by state and time unit (mean aggregation for emissions intensity)
         df = df.groupby([pd.Grouper(key='date', freq="Y"), 'state']).mean().reset_index()
         data = df[df['date'].dt.year == chosen_year]
+
+        # Map state names to state codes
+        states_dict = load_yml(STATES_YML_FILEPATH)
+        data.replace({"state": states_dict}, inplace=True)
 
         # Chart Elements + Plot
         title = "Electricity Generation Emissions Intensity by State"
@@ -50,6 +56,10 @@ def app():
         # Aggregate by state and time unit (sum aggregation for total emissions)
         df = df.groupby([pd.Grouper(key='date', freq="Y"), 'state']).sum().reset_index()
         data = df[df['date'].dt.year == chosen_year]
+
+        # Map state names to state codes
+        states_dict = load_yml(STATES_YML_FILEPATH)
+        data.replace({"state": states_dict}, inplace=True)
 
         # Chart Elements + Plot
         title = "Electricity Generation Emissions by State - {}".format(chosen_fuel.title())
