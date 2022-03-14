@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from src.d00_utils.const import *
-from src.d00_utils.utils import load_yml, load_config
+from src.d00_utils.utils import load_yml, load_config, get_filepath
 from src.d06_reporting.create_forecasts import read_forecast
 from src.d06_reporting.calculate_emissions import read_emissions
 from src.d06_visualization.plot import plot_multiple_states, plot_combined_data_multiple_states
@@ -12,7 +12,7 @@ def app():
     config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
     # Set up sidebar options
-    st.sidebar.title("Filters")
+    st.sidebar.write("## Filters")
     chosen_data_type = st.sidebar.radio(
         "Select the type of data to analyze.",
         options=["Net Electricity Generation (MWh)", "Electricity Fuel Consumption (BTU)"],
@@ -58,8 +58,10 @@ def app():
         fig = plot_multiple_states(gen_by_states, chosen_fuel, ylabel=ylabel)
     st.plotly_chart(fig)
 
-    # Chart 2 Data and Plotting
+    # Emissions Intensity Data and Plotting
     st.write("## Emissions Intensity Across Regions")
+    with st.expander("More info on emissions intensity", expanded=False):
+        st.write(config["explanations"]["emissions_intensity"])
     emissions_by_states = {}
     for state in chosen_states_multi:
         emissions = read_emissions("intensity", state)
@@ -72,9 +74,40 @@ def app():
                                ylabel=ylabel)
     st.plotly_chart(fig)
 
+   # Download Raw Data
+    st.sidebar.write("## Download Data")
+    chosen_download_type = st.sidebar.radio(
+        "Select the type of raw data to download",
+        options=["Net Electricity Generation",
+                 "Total Emissions By Generation Source", "Emissions Intensity"],
+        help=config["tooltips"]["download_type_choice"]
+    )
+    csv = get_download_data(chosen_download_type)
+    st.sidebar.download_button(
+         label=f"Download Data as CSV",
+         data=csv,
+         file_name=f'{chosen_download_type}.csv',
+         mime='text/csv',
+    )
+
 
 def aggregate_by_date(df, time_unit, date_var="date"):
     df[date_var] = pd.to_datetime(df[date_var], format='%Y-%m-%d')
     df = df.resample(time_unit, on=date_var).sum().reset_index()
     return df
 
+
+def get_download_data(chosen_download_type):
+    if chosen_download_type == "Net Electricity Generation":
+        target_folder = 'Combined_Forecasts'
+        file_name = 'Combined-Electricity-Generation-All-States.csv'
+    elif chosen_download_type == "Total Emissions By Generation Source":
+        target_folder = 'Emission_Forecasts'
+        file_name = "Combined-CO2e-Total-Emissions.csv"
+    else:
+        target_folder = 'Emission_Forecasts'
+        file_name = "Combined-CO2e-Emissions-Intensity.csv"
+
+    file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
+    df = pd.read_csv(file_path)
+    return df.to_csv().encode('utf-8')

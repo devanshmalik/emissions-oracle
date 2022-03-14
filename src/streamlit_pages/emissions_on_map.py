@@ -9,6 +9,10 @@ from src.d06_visualization.plot import plot_map
 def app():
     config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
+    st.write("## Emissions Across All States")
+    with st.expander("More info on this section", expanded=False):
+        st.write(config["explanations"]["emissions_on_map"])
+
     # Set up sidebar options
     emissions_type = st.sidebar.radio("Select the type of emissions data.",
                                       options=["Emissions Intensity", "Total Emissions"],
@@ -25,7 +29,7 @@ def app():
         min_value=2001,
         max_value=2025,
     )
-    chosen_fuel = col2.selectbox("Pick a fuel type",
+    chosen_fuel = col2.selectbox("Pick a generation type",
                                  options=fuel_options, help=config["tooltips"]["source_choice_for_map"],
                                  disabled=turn_off_widget)
 

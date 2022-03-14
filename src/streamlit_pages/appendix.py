@@ -11,12 +11,7 @@ from src.d00_utils.utils import get_filepath, load_yml, load_config
 
 def app():
 
-    st.title("Test Page")
-    chosen_state = st.selectbox('Pick a state to visualize', STATES)
-    st.write(f"State Chosen: {chosen_state}")
-    test = st.sidebar.radio("Select the type of data you want to analyze.",
-                            options=[" (MWh)", "nsumption (BTU)"],
-                            help="Write about reg and classification", key="test")
+    st.title("Appendix")
 
     target_folder = 'Emission_Forecasts'
     file_name = 'Combined-CO2e-Total-Emissions.csv'
@@ -24,4 +19,4 @@ def app():
     df = pd.read_csv(file_path)
     df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
 
-    AgGrid(df)
+    # AgGrid(df)

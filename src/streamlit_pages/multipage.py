@@ -7,7 +7,7 @@ This code is borrowed from https://github.com/prakharrathi25/data-storyteller
 
 # Import necessary libraries
 import streamlit as st
-from src.d00_utils.utils import load_config
+from src.d00_utils.utils import load_config, reduce_streamlit_padding
 from src.d00_utils.const import *
 
 
@@ -37,21 +37,7 @@ class MultiPage:
         )
 
     def run(self):
-        # Custom size sidebar
-        st.markdown(
-            """
-            <style>
-            [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
-                width: 350px;
-            }
-            [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
-                width: 350px;
-                margin-left: -350px;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+        reduce_streamlit_padding()
 
         st.sidebar.title("Emissions Oracle")
         # Dropdown to select the page to run

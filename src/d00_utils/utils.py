@@ -71,3 +71,14 @@ def load_config(filepath) -> dict:
         :param filepath:
     """
     return dict(toml.load(filepath))
+
+
+def reduce_streamlit_padding():
+    padding = 0
+    st.markdown(f""" <style>
+                .reportview-container .main .block-container{{
+                    padding-top: {padding}rem;
+                    padding-right: {padding}rem;
+                    padding-left: {padding}rem;
+                    padding-bottom: {padding}rem;
+                }} </style> """, unsafe_allow_html=True)
