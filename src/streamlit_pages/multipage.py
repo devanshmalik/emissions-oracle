@@ -4,10 +4,8 @@ through an object oriented framework.
 
 This code is borrowed from https://github.com/prakharrathi25/data-storyteller
 """
-
-# Import necessary libraries
 import streamlit as st
-from src.d00_utils.utils import load_config, reduce_streamlit_padding
+from src.d00_utils.utils import load_config
 from src.d00_utils.const import *
 
 
@@ -23,12 +21,13 @@ class MultiPage:
     def add_page(self, title, func) -> None:
         """Class Method to Add pages to the project
 
-        Args:
-            title ([str]): The title of page which we are adding to the list of apps
-
-            func: Python function to render this page in Streamlit
+        Parameters
+        ------------
+        title: str
+            The title of page which we are adding to the list of apps
+        func:
+            Python function to render this page in Streamlit
         """
-
         self.pages.append(
             {
                 "title": title,
@@ -37,9 +36,8 @@ class MultiPage:
         )
 
     def run(self):
-        reduce_streamlit_padding()
-
         st.sidebar.title("Emissions Oracle")
+
         # Dropdown to select the page to run
         page = st.sidebar.selectbox(
             'App Navigation',

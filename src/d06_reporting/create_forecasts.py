@@ -1,8 +1,5 @@
-import os
 import logging
 import pandas as pd
-import yaml
-from prophet import Prophet
 import json
 from prophet.serialize import model_from_json
 
@@ -16,15 +13,29 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 class ModelForecast:
     """Class to create forecasts based on models trained earlier"""
     # TODO: Pull directly from config instead of hard coding in script
-    net_gen_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear',
-                     'hydro', 'wind', 'solar_all', 'other']
+    net_gen_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear', 'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']
     """Class to train Facebook Prophet models"""
     def __init__(self, data_type):
+        """
+        Parameters
+        ------------
+        data_type: str
+            Type of data being extracted such as `Net_Gen_By_Fuel_MWh`, `Fuel_Consumption_BTU`.
+            This string is used when creating folders to save respective data and for column names within each dataframe
+        """
         self.data_type = data_type
         self.save_folder = ""
 
     def forecast(self):
+        """
+        Performs two steps for each state:
+        1) Imports each prophet model and creates individual forecasts for time periods till 2025
+        2) Combines individual forecasts into a combined dataframe for each state. For example:
+            - For Alabama state, it will create two CSVs - Net Elec. Gen and Fuel Consumption
+            - Each CSV will have one column for each type of generation i.e Net Elec. Gen will have
+            one column for each type of generation source (coal, solar, wind, etc.)
+        """
         for state in STATES:
             log.info(f"Forecasting for State: {state}")
             self.save_folder = '{}/{}'.format(self.data_type, state)
@@ -36,23 +47,26 @@ class ModelForecast:
             else:
                 raise ValueError(f"Unexpected EIA Data Type encountered: {self.data_type}")
 
-            self.generate_individual_forecasts(fuel_types, state)
-            self.combine_forecasts(fuel_types, state)
+            self._generate_individual_forecasts(fuel_types, state)
+            self._combine_forecasts(fuel_types, state)
 
-    def generate_individual_forecasts(self, fuel_types, state):
+    def _generate_individual_forecasts(self, fuel_types, state):
+        """Read in Prophet model, generate predictions and save as CSV."""
         for fuel_type in fuel_types:
-            model = self.read_prophet_model(fuel_type)
-            forecast = self.predict(model)
-            self.save_individual_forecast(forecast, fuel_type)
+            model = self._load_prophet_model(fuel_type)
+            forecast = self._predict(model)
+            self._save_forecast(forecast, "individual", state, fuel_type)
 
-    def read_prophet_model(self, fuel_type):
+    def _load_prophet_model(self, fuel_type):
+        """Load Prophet model for specific data type, state and fuel type."""
         models_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'json')
         models_file_path = get_filepath(MODELS_FOLDER, self.save_folder, models_file_name)
         with open(models_file_path, 'r') as fin:
             return model_from_json(json.load(fin))
 
     @staticmethod
-    def predict(model):
+    def _predict(model):
+        """Perform predictions for all time periods including 16 future quarters using Prophet model."""
         future = model.make_future_dataframe(periods=16, freq='Q')
         forecast = model.predict(future)
 
@@ -60,56 +74,35 @@ class ModelForecast:
         forecast['y'] = model.history['y'].combine_first(forecast['yhat'])
         return forecast
 
-    # TODO: Combine with save_combined_forecast
-    def save_individual_forecast(self, forecast, fuel_type):
-        # Create new parent folder for all individual forecasts
-        reporting_folder = 'Individual_Forecasts/{}'.format(self.save_folder)
-        reporting_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
-        reporting_file_path = get_filepath(REPORTING_FOLDER, reporting_folder, reporting_file_name)
+    def _save_forecast(self, forecast, forecast_type, state, fuel_type=None):
+        """Save forecast to folder depending on forecast type. """
+        target_folder = ""
+        file_name = ""
+        if forecast_type == 'individual':
+            target_folder = 'Individual_Forecasts/{}/{}'.format(self.data_type, state)
+            file_name = '{}-{}.csv'.format(self.data_type, fuel_type)
+        elif forecast_type == 'combined':
+            target_folder = 'Combined_Forecasts/{}'.format(state)
+            file_name = '{}-Combined.csv'.format(self.data_type)
+        file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
+        forecast.to_csv(file_path, index=False)
 
-        # Saving to CSV loses the datetime format causing errors when plotting
-        forecast.to_csv(reporting_file_path, index=False)
-
-    def combine_forecasts(self, fuel_types, state):
+    def _combine_forecasts(self, fuel_types, state):
+        """For each state and data type, combine individual forecasts into one combined dataframe.
+        For Alabama state and Net Elec. Gen data, it will create a CSV with one column for each
+        type of generation source (coal, solar, wind, etc.).
+        """
         df_combined = pd.DataFrame()
-        # TODO: Do not add all_sources to dataframe
         for fuel in fuel_types:
-            forecast = self.read_forecast(fuel)
+            forecast = read_forecast(self.data_type, "individual", state, fuel)
             if 'date' not in df_combined.columns:
                 df_combined['date'] = forecast['ds']
             df_combined[fuel] = forecast['y']
-        self.save_combined_forecast(df_combined, state)
-
-    def read_forecast(self, fuel_type):
-        # Create new parent folder for all individual forecasts
-        reporting_folder = 'Individual_Forecasts/{}'.format(self.save_folder)
-        reporting_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
-        reporting_file_path = get_filepath(REPORTING_FOLDER, reporting_folder, reporting_file_name)
-
-        return pd.read_csv(reporting_file_path)
-
-    def save_combined_forecast(self, df_combined, state):
-        # Create new parent folder for all combined forecasts
-        reporting_folder = 'Combined_Forecasts/{}'.format(state)
-        reporting_file_name = '{}-Combined.{}'.format(self.data_type, 'csv')
-        reporting_file_path = get_filepath(REPORTING_FOLDER, reporting_folder, reporting_file_name)
-
-        # Saving to CSV loses the datetime format causing errors when plotting
-        df_combined.to_csv(reporting_file_path, index=False)
-
-
-def create_all_forecasts(eia_api_ids):
-    log.info("Creating forecasts for all Prophet Models...")
-    for data_type in eia_api_ids.keys():
-        log.info(f"Creating forecasts for Category: {data_type}")
-        model_forecaster = ModelForecast(data_type=data_type)
-        model_forecaster.forecast()
-    combine_all_states_generation()
-    log.info("Finished all forecasting")
+        self._save_forecast(df_combined, "combined", state)
 
 
 def combine_all_states_generation():
-    """Concatenate all individual state electricity generation CSVs into one"""
+    """Concatenate and save all state electricity generation CSVs into one"""
     generation_combined = pd.DataFrame()
     for state in STATES:
         df_gen = read_forecast("Net_Gen_By_Fuel_MWh", "combined", state)
@@ -125,6 +118,25 @@ def combine_all_states_generation():
 
 
 def read_forecast(data_type, forecast_type, state, fuel_type=None):
+    """
+    Read forecasts from file for specific forecast type (individual and combined).
+
+    Parameters
+    -----------
+    data_type: str
+        Type of data: one of Net_Gen_By_Fuel_MWh or Fuel_Consumption_BTU
+    forecast_type: str
+        Type of forecast data to read: one of individual or combined
+    state: str
+        State of interest
+    fuel_type: str
+        Type of generation source (coal, wind, etc.)
+
+    Returns
+    --------
+    pd.DataFrame()
+        Forecast dataframe
+    """
     target_folder = ""
     file_name = ""
     if forecast_type == 'individual':

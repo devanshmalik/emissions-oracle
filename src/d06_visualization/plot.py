@@ -31,12 +31,14 @@ def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(90
 
     Parameters
     ----------
-    fcst:
+    fcst: pd.DataFrame
         pd.DataFrame output of Prophet model
-    xlabel:
+    xlabel: str
         Optional label name on X-axis
-    ylabel:
+    ylabel: str
         Optional label name on Y-axis
+    figsize: Tuple
+        Size of output figure
 
     Returns
     -------
@@ -133,6 +135,28 @@ def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(90
 
 
 def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
+    """
+    Plot one curve for each fuel type
+
+    Parameters
+    ----------
+    df: pd.DataFrame
+        Dataframe with columns for available fuel types
+    multiple_fuels: list
+        List of fuels to plot
+    title: str
+        Optional plot title name
+    xlabel: str
+        Optional label name on X-axis
+    ylabel: str
+        Optional label name on Y-axis
+    figsize: Tuple
+        Size of output figure
+
+    Returns
+    -------
+    A Plotly Figure.
+    """
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
     df_historical = df[df['date'] < curr_quarter_end]
     df_forecast = df[df['date'] >= curr_quarter_end]
@@ -198,6 +222,28 @@ def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y',
 
 def plot_multiple_states(fcst_by_states, filter_col,
                          title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
+    """
+    Plot one curve for each state - filter the state forecast dataframe by the filter_col.
+
+    Parameters
+    ----------
+    fcst_by_states: Dict(state, pd.DataFrame)
+        Dictionary of forecasts where the key is the state name and value is the forecast
+    filter_col: str
+        Column to plot for each state forecast
+    title: str
+        Optional plot title name
+    xlabel: str
+        Optional label name on X-axis
+    ylabel: str
+        Optional label name on Y-axis
+    figsize: Tuple
+        Size of output figure
+
+    Returns
+    -------
+    A Plotly Figure.
+    """
     data = []
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
     for idx, (state, df) in enumerate(fcst_by_states.items()):
@@ -263,6 +309,32 @@ def plot_multiple_states(fcst_by_states, filter_col,
 
 def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
                                        xlabel='Time', ylabel='y', figsize=(900, 700)):
+    """
+    Create a combined plot with top chart showing generation forecast
+    and bottom chart showing associated GHG emissions with one curve for each state on both plots.
+    Filtering both dataframes by input fuel.
+
+    Parameters
+    ----------
+    gen_by_states: Dict(state, pd.DataFrame)
+        Dictionary of generation forecasts where the key is the state name and value is the forecast
+    emissions_by_states: Dict(state, pd.DataFrame)
+        Dictionary of emissions where the key is the state name and value is the emissions forecast
+    fuel: str
+        Fuel to plot for each type of forecast
+    title: str
+        Optional plot title name
+    xlabel: str
+        Optional label name on X-axis
+    ylabel: str
+        Optional label name on Y-axis
+    figsize: Tuple
+        Size of output figure
+
+    Returns
+    -------
+    A Plotly Figure.
+    """
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
     data = []
     for idx, (state, df) in enumerate(emissions_by_states.items()):
@@ -358,6 +430,31 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
 
 def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
                                       title="", xlabel='Time', ylabel='y', figsize=(900, 700)):
+    """
+    Create a combined plot with top chart showing generation forecast
+    and bottom chart showing associated GHG emissions with one curve for each fuel type.
+
+    Parameters
+    ----------
+    df_generation: pd.DataFrame
+        Generation forecast for the state of interest
+    df_emissions: pd.DataFrame
+        Emissions forecast for the state of interest
+    fuel_types: list
+        List of fuel types to show on both plots
+    title: str
+        Optional plot title name
+    xlabel: str
+        Optional label name on X-axis
+    ylabel: str
+        Optional label name on Y-axis
+    figsize: Tuple
+        Size of output figure
+
+    Returns
+    -------
+    A Plotly Figure.
+    """
     data = []
 
     curr_quarter_end = pd.to_datetime('today') - pd.tseries.offsets.QuarterEnd()
@@ -453,6 +550,24 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
 
 
 def plot_map(df, filter_col, colorbar_title, title):
+    """
+    Create a map plot for all US states using the dataframe supplied.
+
+    Parameters
+    ----------
+    df: pd.DataFrame
+        Data to plot on map.
+    filter_col: pd.DataFrame
+        Column to filter data by
+    colorbar_title: list
+        Title for color bar
+    title: str
+        Plot title name
+
+    Returns
+    -------
+    A Plotly Figure.
+    """
     fig = go.Figure(data=go.Choropleth(
         locations=df['state'],  # Spatial coordinates
         z=df[filter_col].astype(float),  # Data to be color-coded
@@ -468,5 +583,4 @@ def plot_map(df, filter_col, colorbar_title, title):
         title_text=title,
         geo_scope='usa',  # limited map scope to USA
     )
-
     return fig

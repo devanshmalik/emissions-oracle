@@ -11,7 +11,7 @@ from src.d06_visualization.plot import plot_multiple_states, plot_combined_data_
 def app():
     config = load_config(STREAMLIT_CONFIG_FILEPATH)
 
-    # Set up sidebar options
+    # Sidebar options
     st.sidebar.write("## Filters")
     chosen_data_type = st.sidebar.radio(
         "Select the type of data to analyze.",
@@ -27,8 +27,10 @@ def app():
         options=["Quarter", "Year"]
     )
     time_unit = time_units_mapping[chosen_time_unit]
-
     chosen_states_multi = st.sidebar.multiselect('Pick regions to compare.', options=STATES, default=STATES[0])
+
+    # Download Raw Data (through sidebar)
+    setup_data_download(config)
 
     # Chart 1 Options
     st.write("## Electricity Generation & Emissions Across Regions")
@@ -38,6 +40,22 @@ def app():
     )
 
     # Get Data for Chart 1
+    emissions_by_states, gen_by_states = get_multi_region_data(chosen_states_multi, data_type, time_unit)
+
+    # Plot Chart 1
+    ylabel = "Net Generation (Thousand  MWh)" if data_type == "Net_Gen_By_Fuel_MWh" else "Fuel Consumption (million MMBtu)"
+    if show_emissions:
+        fig = plot_combined_data_multiple_states(gen_by_states, emissions_by_states, chosen_fuel,
+                                                 ylabel=ylabel)
+    else:
+        fig = plot_multiple_states(gen_by_states, chosen_fuel, ylabel=ylabel)
+    st.plotly_chart(fig)
+
+    # Emissions Intensity Section
+    plot_emissions_intensity(chosen_states_multi, time_unit, config)
+
+
+def get_multi_region_data(chosen_states_multi, data_type, time_unit):
     gen_by_states = {}
     emissions_by_states = {}
     for state in chosen_states_multi:
@@ -48,33 +66,10 @@ def app():
         df_emissions = read_emissions("total", state)
         df_emissions = aggregate_by_date(df_emissions, time_unit)
         emissions_by_states[state] = df_emissions
+    return emissions_by_states, gen_by_states
 
-    # Plot Chart
-    ylabel = "Net Generation (Thousand  MWh)" if data_type == "Net_Gen_By_Fuel_MWh" else "Fuel Consumption (million MMBtu)"
-    if show_emissions:
-        fig = plot_combined_data_multiple_states(gen_by_states, emissions_by_states, chosen_fuel,
-                                                 ylabel=ylabel)
-    else:
-        fig = plot_multiple_states(gen_by_states, chosen_fuel, ylabel=ylabel)
-    st.plotly_chart(fig)
 
-    # Emissions Intensity Data and Plotting
-    st.write("## Emissions Intensity Across Regions")
-    with st.expander("More info on emissions intensity", expanded=False):
-        st.write(config["explanations"]["emissions_intensity"])
-    emissions_by_states = {}
-    for state in chosen_states_multi:
-        emissions = read_emissions("intensity", state)
-        emissions['date'] = pd.to_datetime(emissions['date'], format='%Y-%m-%d')
-        emissions = emissions.resample(time_unit, on='date').mean().reset_index()
-        emissions_by_states[state] = emissions
-
-    ylabel = "Emissions Intensity (kg CO<sub>2</sub>e per MWh)"
-    fig = plot_multiple_states(emissions_by_states, "emissions_intensity",
-                               ylabel=ylabel)
-    st.plotly_chart(fig)
-
-   # Download Raw Data
+def setup_data_download(config):
     st.sidebar.write("## Download Data")
     chosen_download_type = st.sidebar.radio(
         "Select the type of raw data to download",
@@ -84,11 +79,27 @@ def app():
     )
     csv = get_download_data(chosen_download_type)
     st.sidebar.download_button(
-         label=f"Download Data as CSV",
-         data=csv,
-         file_name=f'{chosen_download_type}.csv',
-         mime='text/csv',
+        label=f"Download Data as CSV",
+        data=csv,
+        file_name=f'{chosen_download_type}.csv',
+        mime='text/csv',
     )
+
+
+def plot_emissions_intensity(chosen_states_multi, time_unit, config):
+    st.write("## Emissions Intensity Across Regions")
+    with st.expander("More info on emissions intensity", expanded=False):
+        st.write(config["explanations"]["emissions_intensity"])
+    emissions_by_states = {}
+    for state in chosen_states_multi:
+        emissions = read_emissions("intensity", state)
+        emissions['date'] = pd.to_datetime(emissions['date'], format='%Y-%m-%d')
+        emissions = emissions.resample(time_unit, on='date').mean().reset_index()
+        emissions_by_states[state] = emissions
+    ylabel = "Emissions Intensity (kg CO<sub>2</sub>e per MWh)"
+    fig = plot_multiple_states(emissions_by_states, "emissions_intensity",
+                               ylabel=ylabel)
+    st.plotly_chart(fig)
 
 
 def aggregate_by_date(df, time_unit, date_var="date"):

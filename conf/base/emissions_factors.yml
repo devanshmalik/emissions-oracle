@@ -11,7 +11,7 @@ Net_Gen_By_Fuel_MWh:
     solar_all: 43
     other: 31
 
-# Coal and coke - Mixed (Electric power sector) (kg/MMBTU)
+# Coal and coke - Mixed (Electric power sector) (kgCO2e/MMBTU)
 # Natural Gas: kgCO2e/MMBTU
 Fuel_Consumption_BTU:
     coal: 96.252
