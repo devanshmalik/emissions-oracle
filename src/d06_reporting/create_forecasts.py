@@ -1,6 +1,7 @@
 import logging
 import pandas as pd
 import json
+from prophet import Prophet
 from prophet.serialize import model_from_json
 
 from src.d00_utils.const import *
@@ -12,12 +13,12 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class ModelForecast:
     """Class to create forecasts based on models trained earlier"""
-    # TODO: Pull directly from config instead of hard coding in script
     net_gen_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear', 'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']
-    """Class to train Facebook Prophet models"""
-    def __init__(self, data_type):
+
+    def __init__(self, data_type: str):
         """
+
         Parameters
         ------------
         data_type: str
@@ -50,14 +51,14 @@ class ModelForecast:
             self._generate_individual_forecasts(fuel_types, state)
             self._combine_forecasts(fuel_types, state)
 
-    def _generate_individual_forecasts(self, fuel_types, state):
+    def _generate_individual_forecasts(self, fuel_types: list, state: str):
         """Read in Prophet model, generate predictions and save as CSV."""
         for fuel_type in fuel_types:
             model = self._load_prophet_model(fuel_type)
             forecast = self._predict(model)
             self._save_forecast(forecast, "individual", state, fuel_type)
 
-    def _load_prophet_model(self, fuel_type):
+    def _load_prophet_model(self, fuel_type: str) -> Prophet:
         """Load Prophet model for specific data type, state and fuel type."""
         models_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'json')
         models_file_path = get_filepath(MODELS_FOLDER, self.save_folder, models_file_name)
@@ -65,16 +66,16 @@ class ModelForecast:
             return model_from_json(json.load(fin))
 
     @staticmethod
-    def _predict(model):
-        """Perform predictions for all time periods including 16 future quarters using Prophet model."""
-        future = model.make_future_dataframe(periods=16, freq='Q')
+    def _predict(model: Prophet) -> pd.DataFrame:
+        """Perform predictions for all time periods including 12 future quarters using Prophet model."""
+        future = model.make_future_dataframe(periods=12, freq='Q')
         forecast = model.predict(future)
 
         # Create column y with historical values for periods in past with future predictions for future periods
         forecast['y'] = model.history['y'].combine_first(forecast['yhat'])
         return forecast
 
-    def _save_forecast(self, forecast, forecast_type, state, fuel_type=None):
+    def _save_forecast(self, forecast: pd.DataFrame, forecast_type: str, state: str, fuel_type: str = None):
         """Save forecast to folder depending on forecast type. """
         target_folder = ""
         file_name = ""
@@ -87,7 +88,7 @@ class ModelForecast:
         file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
         forecast.to_csv(file_path, index=False)
 
-    def _combine_forecasts(self, fuel_types, state):
+    def _combine_forecasts(self, fuel_types: list, state: str):
         """For each state and data type, combine individual forecasts into one combined dataframe.
         For Alabama state and Net Elec. Gen data, it will create a CSV with one column for each
         type of generation source (coal, solar, wind, etc.).
@@ -117,7 +118,7 @@ def combine_all_states_generation():
     generation_combined.to_csv(file_path, index=False)
 
 
-def read_forecast(data_type, forecast_type, state, fuel_type=None):
+def read_forecast(data_type: str, forecast_type: str, state: str, fuel_type: str = None) -> pd.DataFrame:
     """
     Read forecasts from file for specific forecast type (individual and combined).
 

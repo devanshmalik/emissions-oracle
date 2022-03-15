@@ -1,11 +1,13 @@
 import requests
 import json
 import logging
+from typing import Union, Dict, List, Type
 
 from src.d00_utils.const import *
 from src.d00_utils.utils import get_filepath
 
-
+from typing import Union, Dict, List, Type
+TypeJSON = Union[Dict[str, 'JSON'], List['JSON'], int, str, float, bool, Type[None]]
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
@@ -43,7 +45,7 @@ class EIADataPull:
                 self._save_data(response, file_name)
 
     @staticmethod
-    def _request_data(api_series_id, state):
+    def _request_data(api_series_id: str, state: str) -> TypeJSON:
         """Perform REST get request from EIA API for specific data."""
         custom_series_id = api_series_id.format(state)
         return requests.get(

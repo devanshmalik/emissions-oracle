@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from typing import Dict, Tuple
 
 from src.d00_utils.const import *
 from src.d00_utils.utils import load_yml, load_config, get_filepath
@@ -55,7 +56,25 @@ def app():
     plot_emissions_intensity(chosen_states_multi, time_unit, config)
 
 
-def get_multi_region_data(chosen_states_multi, data_type, time_unit):
+def get_multi_region_data(chosen_states_multi: list, data_type: str, time_unit: str) -> Tuple[Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]]:
+    """
+    Read generation and emissions data for multiple states
+
+    Parameters
+    -----------
+    chosen_states_multi: list
+        File path to YAML config
+    data_type: str
+        Type of data being extracted such as `Net_Gen_By_Fuel_MWh`, `Fuel_Consumption_BTU`.
+    time_unit: str
+        String signifying time unit to group data by (Q: Quarter, Y: Year)
+
+    Returns
+    --------
+    Tuple[Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]]
+        Each item of tuple is a dictionary where the key is state name and value is
+        generation dataframe for the first tuple item and emissions dataframe for the second tuple item.
+    """
     gen_by_states = {}
     emissions_by_states = {}
     for state in chosen_states_multi:
@@ -69,7 +88,15 @@ def get_multi_region_data(chosen_states_multi, data_type, time_unit):
     return emissions_by_states, gen_by_states
 
 
-def setup_data_download(config):
+def setup_data_download(config: dict):
+    """
+    Setup widgets for raw data download and return data when button clicked.
+
+    Parameters
+    ----------
+    config: dict
+        Streamlit dict config
+    """
     st.sidebar.write("## Download Data")
     chosen_download_type = st.sidebar.radio(
         "Select the type of raw data to download",
@@ -86,7 +113,19 @@ def setup_data_download(config):
     )
 
 
-def plot_emissions_intensity(chosen_states_multi, time_unit, config):
+def plot_emissions_intensity(chosen_states_multi: list, time_unit: str, config: dict):
+    """
+    Get data for emissions intensity for multiple states and plot it.
+
+    Parameters
+    -----------
+    chosen_states_multi: list
+        File path to YAML config
+    time_unit: str
+        String signifying time unit to group data by (Q: Quarter, Y: Year)
+    config: dict
+        Streamlit dict config
+    """
     st.write("## Emissions Intensity Across Regions")
     with st.expander("More info on emissions intensity", expanded=False):
         st.write(config["explanations"]["emissions_intensity"])
@@ -102,13 +141,43 @@ def plot_emissions_intensity(chosen_states_multi, time_unit, config):
     st.plotly_chart(fig)
 
 
-def aggregate_by_date(df, time_unit, date_var="date"):
+def aggregate_by_date(df: pd.DataFrame, time_unit: str, date_var: str = "date") -> pd.DataFrame:
+    """
+    Aggregate data by time unit
+
+    Parameters
+    -----------
+    df: pd.DataFrame
+        Data to aggregate
+    time_unit: str
+        String signifying time unit to group data by (Q: Quarter, Y: Year)
+    date_var: str
+        String for the data column name in dataframe
+
+    Returns
+    ---------
+    pd.DataFrame
+        Data grouped by time unit
+    """
     df[date_var] = pd.to_datetime(df[date_var], format='%Y-%m-%d')
     df = df.resample(time_unit, on=date_var).sum().reset_index()
     return df
 
 
-def get_download_data(chosen_download_type):
+def get_download_data(chosen_download_type: str):
+    """
+    Read data to be downloaded and return as encoded CSV in 'utf-8' format.
+
+    Parameters
+    ------------
+    chosen_download_type: str
+        String for the type of data to be downloaded
+
+    Returns
+    ---------
+    CSV
+        CSV data to be downloaded
+    """
     if chosen_download_type == "Net Electricity Generation":
         target_folder = 'Combined_Forecasts'
         file_name = 'Combined-Electricity-Generation-All-States.csv'

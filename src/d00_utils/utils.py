@@ -21,10 +21,9 @@ def setup_env_vars():
     # load up the entries as environment variables
     load_dotenv(dotenv_path)
     log.info("Finished loading environment variables.")
-    return
 
 
-def get_filepath(parent_folder, save_folder, file_name):
+def get_filepath(parent_folder: str, save_folder: str, file_name: str) -> str:
     """Create folder for saving data (if not exists already) and return final filepath.
 
     Eg: For parent_folder = 'data/01_raw/', save_folder = 'Net_Generation' and file_name = 'net_generation_{}.{}'   
@@ -51,7 +50,7 @@ def get_filepath(parent_folder, save_folder, file_name):
     return os.path.join(folder_path, file_name)
 
 
-def load_yml(filepath):
+def load_yml(filepath: str) -> dict:
     """
     Load YAML config. 
     
@@ -70,7 +69,7 @@ def load_yml(filepath):
 
 
 @st.cache(allow_output_mutation=True, ttl=300)
-def load_config(toml_filepath) -> dict:
+def load_config(toml_filepath: str) -> dict:
     """Loads toml configuration file.
     
     Parameters

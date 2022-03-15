@@ -12,11 +12,10 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 
 class ModelTrainer:
-    # TODO: Pull directly from config instead of hard coding in script
     net_gen_fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear', 'hydro', 'wind', 'solar_all', 'other']
     total_consumption_fuels = ['coal', 'natural_gas']
     """Class to train Facebook Prophet models"""
-    def __init__(self, data_type):
+    def __init__(self, data_type: str):
         """
         Parameters
         ------------
@@ -45,20 +44,20 @@ class ModelTrainer:
                 model = self._fit_model(df)
                 self._save_model(model, fuel_type)
 
-    def _read_processed_data(self, fuel_type):
+    def _read_processed_data(self, fuel_type: str) -> pd.DataFrame:
         """Reads data from processed folder for specific fuel type."""
         processed_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
         processed_file_path = get_filepath(PROCESSED_DATA_FOLDER, self.save_folder, processed_file_name)
         return pd.read_csv(processed_file_path)
 
     @staticmethod
-    def _fit_model(df):
+    def _fit_model(df: pd.DataFrame) -> Prophet:
         """Train Prophet model using the input processed dataframe"""
         model = Prophet()
         model.fit(df)
         return model
 
-    def _save_model(self, model, fuel_type):
+    def _save_model(self, model: Prophet, fuel_type: str):
         """Save trained Prophet model as a JSON object."""
         models_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'json')
         models_file_path = get_filepath(MODELS_FOLDER, self.save_folder, models_file_name)

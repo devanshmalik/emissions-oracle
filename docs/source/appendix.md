@@ -3,13 +3,14 @@
 This page aims to provide details on the methodologies used and assumptions made for various aspects of the project. This includes:
 - Data Science End-to-End Pipeline (data collection, preprocessing, feature engineering, modelling, reporting)
 - Greenhouse Gas (GHG) Emissions (emissions calculations, assumptions, etc.)
+- Project Assumptions (electricity generation context related assumptions)
 
 ## 1. Data Science Pipeline 
 
 The project was structured to easily allow the end to end running of data science pipeline through an interface. 
-To create modular components that feed into each other, both the data and python scripts were separated into multiple layers. 
+To create modular components that feed into each other, both the data and python scripts were separated into multiple layers.
 
-The different data layers are: 
+**The different data layers are:** 
 
 **Raw** 
   - The data pulled from the external source is the raw data. Raw data is immutable and is never edited. This allows for anyone to be able to reproduce the final products with only the python code and the raw data. 
@@ -47,6 +48,22 @@ The different data layers are:
       - Emissions Intensity: This is the volume of GHG emissions per unit of electricity generated. Hence, the lower the emissions intensity, the greener the electricity grid. This value allows for easier comparison of emissions between regions compared to using "Total Emissions".
       - Total Emissions: This is the volume of total GHG emissions for the chosen electricity generation source.      
     
+### Pipeline Interface 
+
+A higher level interface has also been created to easily re-run any specific component of the data pipeline above without affecting 
+other modular components. 
+
+This is done through a python class called `PipelineInterface` and sample code to run any pipeline component is: 
+```python
+interface = PipelineInterface(EIA_API_IDS_YML_FILEPATH, EMISSIONS_FACTORS_YML_FILEPATH)
+interface.pull_data()
+interface.clean_data()
+interface.process_data()
+interface.train_models()
+interface.create_forecasts()
+interface.calculate_emissions()
+```
+
 ## 2. Greenhouse Gas Emissions Estimate Methodology
 
 All estimates in this analysis are aimed to account for the entire life cycle of the electricity generation. 

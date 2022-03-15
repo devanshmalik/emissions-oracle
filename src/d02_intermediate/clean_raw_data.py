@@ -12,7 +12,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class DataCleaner:
     """Class to clean raw data prior to feature engineering."""
-    def __init__(self, data_type, api_ids_dict ):
+    def __init__(self, data_type: str, api_ids_dict: dict):
         """
 
         Parameters
@@ -46,7 +46,7 @@ class DataCleaner:
                 df = self._impute_missing_data(df)
                 self._save_intermediate_data(df)
 
-    def _convert_raw_data(self):
+    def _convert_raw_data(self) -> pd.DataFrame:
         """Read raw JSON data and convert to Pandas dataframe including handling invalid responses"""
         raw_file_name = '{}-{}.{}'.format(self.data_type, self.fuel_type, 'json')
         raw_file_path = get_filepath(RAW_DATA_FOLDER, self.save_folder, raw_file_name)
@@ -59,7 +59,7 @@ class DataCleaner:
                 return self._create_empty_df()
 
     @staticmethod
-    def _is_response_valid(json_data):
+    def _is_response_valid(json_data) -> bool:
         """Checks if the EIA JSON response is valid."""
         if 'data' in json_data and 'error' in json_data['data']:
             log.info(f"Invalid response for EIA Series ID: {json_data['request']['series_id']}"
@@ -67,7 +67,7 @@ class DataCleaner:
             return False
         return True
 
-    def _create_valid_df(self, json_data):
+    def _create_valid_df(self, json_data) -> pd.DataFrame:
         """Creates a dataframe from JSON response and converts quarter string to datetime format"""
         df = pd.DataFrame(json_data['series'][0]['data'])
         df.columns = ["date", self.data_type]
@@ -78,7 +78,7 @@ class DataCleaner:
         df['date'] = df['date'] + pd.offsets.QuarterEnd(0)
         return df
 
-    def _create_empty_df(self):
+    def _create_empty_df(self) -> pd.DataFrame:
         """Creates an empty df when the JSON response from EIA is invalid
         which means there is no data for that attribute for the state specified."""
         start_date = "2001-01-01"
@@ -86,7 +86,7 @@ class DataCleaner:
         dt_range = pd.date_range(start_date, end_date, freq='Q')
         return pd.DataFrame({'date': dt_range, self.data_type: 0.0})
 
-    def _impute_missing_data(self, df):
+    def _impute_missing_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Performs two imputations on each CSV file in 02_intermediate data folder:
         1) Impute 0 for all rows with missing y value (eg: Net_Gen_By_Fuel_MWh)
@@ -107,7 +107,7 @@ class DataCleaner:
         # Create dataframe from pd.Series
         return pd.DataFrame({'date': pd_series.index, self.data_type: pd_series.values})
 
-    def _save_intermediate_data(self, df):
+    def _save_intermediate_data(self, df: pd.DataFrame):
         """Save cleaned raw data in intermediate data folder."""
         intermediate_file_name = '{}-{}.{}'.format(self.data_type, self.fuel_type, 'csv')
         intermediate_file_path = get_filepath(INTERMEDIATE_DATA_FOLDER, self.save_folder, intermediate_file_name)

@@ -10,7 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class DataPreprocessor:
     """Class to preprocess intermediate data prior to training models"""
-    def __init__(self, data_type, api_ids_dict):
+    def __init__(self, data_type: str, api_ids_dict: dict):
         """
 
         Parameters
@@ -72,13 +72,13 @@ class DataPreprocessor:
             df = self._read_input_data(fuel_type)
             self._save_feature(df, fuel_type)
 
-    def _read_input_data(self, fuel_type):
+    def _read_input_data(self, fuel_type: str) -> pd.DataFrame:
         """Reads data from intermediate folder for specific fuel type."""
         intermediate_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
         intermediate_file_path = get_filepath(INTERMEDIATE_DATA_FOLDER, self.save_folder, intermediate_file_name)
         return pd.read_csv(intermediate_file_path)
 
-    def _save_feature(self, df, fuel_type):
+    def _save_feature(self, df: pd.DataFrame, fuel_type: str):
         """Saves the final engineered feature ready for model training in Processed Data folder."""
         processed_file_name = '{}-{}.{}'.format(self.data_type, fuel_type, 'csv')
         processed_file_path = get_filepath(PROCESSED_DATA_FOLDER, self.save_folder, processed_file_name)

@@ -1,6 +1,7 @@
 import os
 import logging
 import pandas as pd
+from typing import List, Set, Dict, Tuple
 
 import plotly.graph_objects as go
 import plotly.io as pio
@@ -25,7 +26,13 @@ COLORS = [
 ]
 
 
-def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
+def plot_prophet_forecast(
+        fcst: pd.DataFrame,
+        title: str = "",
+        xlabel: str = 'Time',
+        ylabel: str = 'y',
+        figsize: Tuple = (900, 600)
+):
     """Plot the Prophet forecast with actual and prediction values.
     The plot shows the uncertainty ranges for each prediction.
 
@@ -33,6 +40,8 @@ def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(90
     ----------
     fcst: pd.DataFrame
         pd.DataFrame output of Prophet model
+    title: str
+        Optional title of plot
     xlabel: str
         Optional label name on X-axis
     ylabel: str
@@ -134,7 +143,14 @@ def plot_prophet_forecast(fcst, title="", xlabel='Time', ylabel='y', figsize=(90
     return fig
 
 
-def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
+def plot_multiple_fuels(
+        df: pd.DataFrame,
+        multiple_fuels: list,
+        title: str = "",
+        xlabel: str = 'Time',
+        ylabel: str = 'y',
+        figsize: Tuple = (900, 600)
+):
     """
     Plot one curve for each fuel type
 
@@ -220,8 +236,14 @@ def plot_multiple_fuels(df, multiple_fuels, title="", xlabel='Time', ylabel='y',
     return go.Figure(data=data, layout=layout)
 
 
-def plot_multiple_states(fcst_by_states, filter_col,
-                         title="", xlabel='Time', ylabel='y', figsize=(900, 600)):
+def plot_multiple_states(
+        fcst_by_states: Dict[str, pd.DataFrame],
+        filter_col: str,
+        title: str = "",
+        xlabel: str = 'Time',
+        ylabel: str = 'y',
+        figsize: Tuple = (900, 600)
+):
     """
     Plot one curve for each state - filter the state forecast dataframe by the filter_col.
 
@@ -307,8 +329,14 @@ def plot_multiple_states(fcst_by_states, filter_col,
     return go.Figure(data=data, layout=layout)
 
 
-def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
-                                       xlabel='Time', ylabel='y', figsize=(900, 700)):
+def plot_combined_data_multiple_states(
+        gen_by_states: Dict[str, pd.DataFrame],
+        emissions_by_states: Dict[str, pd.DataFrame],
+        fuel: str,
+        xlabel: str = 'Time',
+        ylabel: str = 'y',
+        figsize: Tuple = (900, 600)
+):
     """
     Create a combined plot with top chart showing generation forecast
     and bottom chart showing associated GHG emissions with one curve for each state on both plots.
@@ -428,8 +456,15 @@ def plot_combined_data_multiple_states(gen_by_states, emissions_by_states, fuel,
     return go.Figure(data=data, layout=layout)
 
 
-def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
-                                      title="", xlabel='Time', ylabel='y', figsize=(900, 700)):
+def plot_combined_data_multiple_fuels(
+        df_generation: pd.DataFrame,
+        df_emissions: pd.DataFrame,
+        fuel_types: list,
+        title: str = "",
+        xlabel: str = 'Time',
+        ylabel: str = 'y',
+        figsize: Tuple = (900, 600)
+):
     """
     Create a combined plot with top chart showing generation forecast
     and bottom chart showing associated GHG emissions with one curve for each fuel type.
@@ -549,7 +584,12 @@ def plot_combined_data_multiple_fuels(df_generation, df_emissions, fuel_types,
     return go.Figure(data=data, layout=layout)
 
 
-def plot_map(df, filter_col, colorbar_title, title):
+def plot_map(
+        df: pd.DataFrame,
+        filter_col: str,
+        colorbar_title: str,
+        title: str
+):
     """
     Create a map plot for all US states using the dataframe supplied.
 

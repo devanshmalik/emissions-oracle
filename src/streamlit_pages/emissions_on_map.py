@@ -72,7 +72,20 @@ def app():
     st.plotly_chart(fig)
 
 
-def get_emissions_data(file_name):
+def get_emissions_data(file_name: str) -> pd.DataFrame:
+    """
+    Read combined emissions data CSV for plotting.
+
+    Parameters
+    -----------
+    file_name: str
+        File name of emissions CSV
+
+    Returns
+    --------
+    pd.DataFrame
+        Emission forecast dataframe
+    """
     target_folder = 'Emission_Forecasts'
     file_path = get_filepath(REPORTING_FOLDER, target_folder, file_name)
     df = pd.read_csv(file_path)

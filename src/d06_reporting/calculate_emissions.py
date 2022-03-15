@@ -12,10 +12,9 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 class EmissionsCalculator:
     """Class to calculate emissions for all regions based on forecasts generated earlier."""
-    # TODO: Pull directly from config instead of hard coding in script
     net_gen_fuels = ['coal', 'natural_gas', 'nuclear', 'hydro', 'wind', 'solar_all', 'other']
 
-    def __init__(self, emission_factors):
+    def __init__(self, emission_factors: dict):
         """
 
         Parameters
@@ -49,7 +48,7 @@ class EmissionsCalculator:
         log.info("Completed calculating total emissions for all states.")
 
     @staticmethod
-    def _create_empty_dataframe(state):
+    def _create_empty_dataframe(state: str) -> pd.DataFrame:
         """Create dataframe with columns for each type of generation and initialized value of 0"""
         df = pd.DataFrame()
         fcst = read_forecast("Net_Gen_By_Fuel_MWh", 'combined', state)
@@ -79,7 +78,7 @@ class EmissionsCalculator:
         log.info("Completed calculating emissions intensity for all states.")
 
     @staticmethod
-    def _save_emissions(df, emissions_type, state):
+    def _save_emissions(df: pd.DataFrame, emissions_type: str, state: str):
         """Save calculated emissions in relevant folders based on emissions_type."""
         target_folder = ""
         file_name = ""
@@ -117,7 +116,7 @@ class EmissionsCalculator:
         total_emissions_combined.to_csv(file_path_total, index=False)
 
 
-def read_emissions(emissions_type, state):
+def read_emissions(emissions_type: str, state: str) -> pd.DataFrame:
     """
     Read emissions from file for specific emissions type (total emissions or emissions intensity).
 

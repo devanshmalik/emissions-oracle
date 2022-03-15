@@ -1,20 +1,17 @@
 import pandas as pd
 import streamlit as st
 import json
+from typing import Tuple
 
 from prophet.serialize import model_from_json
 from prophet.plot import plot_components_plotly
 
 
 from src.d00_utils.const import *
-from src.d00_utils.utils import get_filepath, load_yml, load_config
+from src.d00_utils.utils import get_filepath, load_config
 from src.d06_reporting.create_forecasts import read_forecast
 from src.d06_reporting.calculate_emissions import read_emissions
-from src.d06_visualization.plot import (
-    plot_prophet_forecast,
-    plot_multiple_fuels,
-    plot_combined_data_multiple_fuels,
-)
+from src.d06_visualization.plot import plot_prophet_forecast, plot_multiple_fuels, plot_combined_data_multiple_fuels
 
 
 def app():
@@ -100,7 +97,19 @@ def app():
         plot_components(chosen_fuel, chosen_state, data_type)
 
 
-def plot_components(chosen_fuel, chosen_state, data_type):
+def plot_components(chosen_fuel: str, chosen_state: str, data_type: str):
+    """
+    Get data for Prophet model components and plot it.
+
+    Parameters
+    -----------
+    chosen_fuel: str
+        Type of fuel
+    chosen_state: str
+        State of interest
+    data_type: str
+        Type of data being extracted such as `Net_Gen_By_Fuel_MWh`, `Fuel_Consumption_BTU`.
+    """
     # Get model and forecast
     save_folder = '{}/{}'.format(data_type, chosen_state)
     models_file_name = '{}-{}.{}'.format(data_type, chosen_fuel, 'json')
@@ -115,7 +124,22 @@ def plot_components(chosen_fuel, chosen_state, data_type):
     st.plotly_chart(fig)
 
 
-def get_chart_labels(chosen_state, data_type):
+def get_chart_labels(chosen_state: str, data_type: str) -> Tuple[str, str]:
+    """
+    Get strings for chart elements when plotting
+
+    Parameters
+    -----------
+    chosen_state: str
+        State of interest
+    data_type: str
+        Type of data being extracted such as `Net_Gen_By_Fuel_MWh`, `Fuel_Consumption_BTU`.
+
+    Returns
+    --------
+    Tuple[str, str]
+        Strings for the title and y-axis label
+    """
     if data_type == "Net_Gen_By_Fuel_MWh":
         title = "Net Electricity Generation - {}".format(chosen_state)
         ylabel = "Net Generation (Thousand  MWh)"
@@ -125,7 +149,24 @@ def get_chart_labels(chosen_state, data_type):
     return title, ylabel
 
 
-def aggregate_by_date(df, time_unit, date_var="date"):
+def aggregate_by_date(df: pd.DataFrame, time_unit: str, date_var: str = "date") -> pd.DataFrame:
+    """
+    Aggregate data by time unit.
+
+    Parameters
+    -----------
+    df: pd.DataFrame
+        Data to aggregate
+    time_unit: str
+        String signifying time unit to group data by (Q: Quarter, Y: Year)
+    date_var: str
+        String for the data column name in dataframe
+
+    Returns
+    ---------
+    pd.DataFrame
+        Data grouped by time unit
+    """
     df[date_var] = pd.to_datetime(df[date_var], format='%Y-%m-%d')
     df = df.resample(time_unit, on=date_var).sum().reset_index()
     return df
