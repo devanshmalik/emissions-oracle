@@ -69,7 +69,7 @@ def app():
         emissions = emissions.resample(time_unit, on='date').mean().reset_index()
         emissions_by_states[state] = emissions
 
-    ylabel = "Emissions Intensity (kg CO<sub>2</sub>e per kWh)"
+    ylabel = "Emissions Intensity (kg CO<sub>2</sub>e per MWh)"
     fig = plot_multiple_states(emissions_by_states, "emissions_intensity",
                                ylabel=ylabel)
     st.plotly_chart(fig)

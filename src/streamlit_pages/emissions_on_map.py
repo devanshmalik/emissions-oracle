@@ -51,7 +51,7 @@ def app():
 
         # Chart Elements + Plot
         title = "Electricity Generation Emissions Intensity by State"
-        colorbar_title = "kg CO<sub>2</sub>e per kWh"
+        colorbar_title = "kg CO<sub>2</sub>e per MWh"
         fig = plot_map(data, "emissions_intensity", colorbar_title=colorbar_title, title=title)
     else:
         file_name = 'Combined-CO2e-Total-Emissions.csv'
