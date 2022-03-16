@@ -1,0 +1,112 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-SD-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-SD-99.Q",
+            "name": "Net generation : all utility-scale solar : South Dakota : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-SD",
+            "geography": "USA-SD",
+            "start": "2016Q3",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    null
+                ],
+                [
+                    "2021Q3",
+                    null
+                ],
+                [
+                    "2021Q2",
+                    null
+                ],
+                [
+                    "2021Q1",
+                    null
+                ],
+                [
+                    "2020Q4",
+                    0.30378
+                ],
+                [
+                    "2020Q3",
+                    0.66227
+                ],
+                [
+                    "2020Q2",
+                    0.70577
+                ],
+                [
+                    "2020Q1",
+                    0.37918
+                ],
+                [
+                    "2019Q4",
+                    0.25529
+                ],
+                [
+                    "2019Q3",
+                    0.6469
+                ],
+                [
+                    "2019Q2",
+                    0.65366
+                ],
+                [
+                    "2019Q1",
+                    0.27318
+                ],
+                [
+                    "2018Q4",
+                    0.20911
+                ],
+                [
+                    "2018Q3",
+                    0.54605
+                ],
+                [
+                    "2018Q2",
+                    0.58042
+                ],
+                [
+                    "2018Q1",
+                    0.33643
+                ],
+                [
+                    "2017Q4",
+                    0.28988
+                ],
+                [
+                    "2017Q3",
+                    0.70443
+                ],
+                [
+                    "2017Q2",
+                    0.677
+                ],
+                [
+                    "2017Q1",
+                    0.38468
+                ],
+                [
+                    "2016Q4",
+                    0.25237
+                ],
+                [
+                    "2016Q3",
+                    0.11164
+                ]
+            ]
+        }
+    ]
+}

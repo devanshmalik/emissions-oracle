@@ -1,0 +1,80 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.OTH-DE-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.OTH-DE-99.Q",
+            "name": "Net generation : other : Delaware : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All other sources of electric generation including waste heat; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-DE",
+            "geography": "USA-DE",
+            "start": "2008Q1",
+            "end": "2011Q2",
+            "updated": "2016-12-19T17:19:30-0500",
+            "data": [
+                [
+                    "2011Q2",
+                    0
+                ],
+                [
+                    "2011Q1",
+                    0
+                ],
+                [
+                    "2010Q4",
+                    0
+                ],
+                [
+                    "2010Q3",
+                    0
+                ],
+                [
+                    "2010Q2",
+                    0
+                ],
+                [
+                    "2010Q1",
+                    0
+                ],
+                [
+                    "2009Q4",
+                    1.56877
+                ],
+                [
+                    "2009Q3",
+                    1.50413
+                ],
+                [
+                    "2009Q2",
+                    1.98686
+                ],
+                [
+                    "2009Q1",
+                    0.81718
+                ],
+                [
+                    "2008Q4",
+                    0.36557
+                ],
+                [
+                    "2008Q3",
+                    6.1071
+                ],
+                [
+                    "2008Q2",
+                    1.7862
+                ],
+                [
+                    "2008Q1",
+                    2.68202
+                ]
+            ]
+        }
+    ]
+}

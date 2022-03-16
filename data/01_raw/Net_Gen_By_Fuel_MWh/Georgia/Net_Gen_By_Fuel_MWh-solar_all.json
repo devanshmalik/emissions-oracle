@@ -1,0 +1,152 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.TSN-GA-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.TSN-GA-99.Q",
+            "name": "Net generation : all solar : Georgia : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-GA",
+            "geography": "USA-GA",
+            "start": "2014Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    null
+                ],
+                [
+                    "2021Q3",
+                    null
+                ],
+                [
+                    "2021Q2",
+                    null
+                ],
+                [
+                    "2021Q1",
+                    null
+                ],
+                [
+                    "2020Q4",
+                    null
+                ],
+                [
+                    "2020Q3",
+                    null
+                ],
+                [
+                    "2020Q2",
+                    1203.47998
+                ],
+                [
+                    "2020Q1",
+                    739.65378
+                ],
+                [
+                    "2019Q4",
+                    null
+                ],
+                [
+                    "2019Q3",
+                    null
+                ],
+                [
+                    "2019Q2",
+                    746.92071
+                ],
+                [
+                    "2019Q1",
+                    489.56698
+                ],
+                [
+                    "2018Q4",
+                    null
+                ],
+                [
+                    "2018Q3",
+                    671.02217
+                ],
+                [
+                    "2018Q2",
+                    691.63998
+                ],
+                [
+                    "2018Q1",
+                    468.73752
+                ],
+                [
+                    "2017Q4",
+                    null
+                ],
+                [
+                    "2017Q3",
+                    null
+                ],
+                [
+                    "2017Q2",
+                    670.12433
+                ],
+                [
+                    "2017Q1",
+                    487.51403
+                ],
+                [
+                    "2016Q4",
+                    null
+                ],
+                [
+                    "2016Q3",
+                    null
+                ],
+                [
+                    "2016Q2",
+                    null
+                ],
+                [
+                    "2016Q1",
+                    null
+                ],
+                [
+                    "2015Q4",
+                    null
+                ],
+                [
+                    "2015Q3",
+                    null
+                ],
+                [
+                    "2015Q2",
+                    null
+                ],
+                [
+                    "2015Q1",
+                    null
+                ],
+                [
+                    "2014Q4",
+                    46.5868
+                ],
+                [
+                    "2014Q3",
+                    58.66888
+                ],
+                [
+                    "2014Q2",
+                    64.09911
+                ],
+                [
+                    "2014Q1",
+                    49.03415
+                ]
+            ]
+        }
+    ]
+}

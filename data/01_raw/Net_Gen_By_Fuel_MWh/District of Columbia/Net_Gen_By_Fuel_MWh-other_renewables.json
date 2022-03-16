@@ -1,0 +1,132 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.AOR-DC-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.AOR-DC-99.Q",
+            "name": "Net generation : other renewables (total) : District Of Columbia : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "Summation of all renewable sources including wind, solar, biomass, geothermal and other renewable sources other than hydroelectric dams; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-DC",
+            "geography": "USA-DC",
+            "start": "2015Q2",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    20.87353
+                ],
+                [
+                    "2021Q3",
+                    22.15004
+                ],
+                [
+                    "2021Q2",
+                    23.01412
+                ],
+                [
+                    "2021Q1",
+                    15.66667
+                ],
+                [
+                    "2020Q4",
+                    16.07619
+                ],
+                [
+                    "2020Q3",
+                    15.11442
+                ],
+                [
+                    "2020Q2",
+                    18.2824
+                ],
+                [
+                    "2020Q1",
+                    18.07408
+                ],
+                [
+                    "2019Q4",
+                    16.21682
+                ],
+                [
+                    "2019Q3",
+                    16.65032
+                ],
+                [
+                    "2019Q2",
+                    16.02629
+                ],
+                [
+                    "2019Q1",
+                    15.06357
+                ],
+                [
+                    "2018Q4",
+                    14.017
+                ],
+                [
+                    "2018Q3",
+                    13.039
+                ],
+                [
+                    "2018Q2",
+                    14.153
+                ],
+                [
+                    "2018Q1",
+                    15.352
+                ],
+                [
+                    "2017Q4",
+                    14.164
+                ],
+                [
+                    "2017Q3",
+                    9.777
+                ],
+                [
+                    "2017Q2",
+                    9.364
+                ],
+                [
+                    "2017Q1",
+                    13.862
+                ],
+                [
+                    "2016Q4",
+                    13.15781
+                ],
+                [
+                    "2016Q3",
+                    12.81065
+                ],
+                [
+                    "2016Q2",
+                    13.69915
+                ],
+                [
+                    "2016Q1",
+                    13.10379
+                ],
+                [
+                    "2015Q4",
+                    14.18116
+                ],
+                [
+                    "2015Q3",
+                    13.00137
+                ],
+                [
+                    "2015Q2",
+                    3.81647
+                ]
+            ]
+        }
+    ]
+}

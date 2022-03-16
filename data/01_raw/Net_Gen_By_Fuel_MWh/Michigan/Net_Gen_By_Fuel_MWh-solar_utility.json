@@ -1,0 +1,132 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-MI-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-MI-99.Q",
+            "name": "Net generation : all utility-scale solar : Michigan : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-MI",
+            "geography": "USA-MI",
+            "start": "2015Q2",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    84.57446
+                ],
+                [
+                    "2021Q3",
+                    140.30013
+                ],
+                [
+                    "2021Q2",
+                    144.63057
+                ],
+                [
+                    "2021Q1",
+                    88.5737
+                ],
+                [
+                    "2020Q4",
+                    26.85712
+                ],
+                [
+                    "2020Q3",
+                    52.27632
+                ],
+                [
+                    "2020Q2",
+                    51.58383
+                ],
+                [
+                    "2020Q1",
+                    24.45072
+                ],
+                [
+                    "2019Q4",
+                    21.02385
+                ],
+                [
+                    "2019Q3",
+                    49.63898
+                ],
+                [
+                    "2019Q2",
+                    43.11035
+                ],
+                [
+                    "2019Q1",
+                    29.18783
+                ],
+                [
+                    "2018Q4",
+                    16.0247
+                ],
+                [
+                    "2018Q3",
+                    45.06527
+                ],
+                [
+                    "2018Q2",
+                    39.66434
+                ],
+                [
+                    "2018Q1",
+                    17.3982
+                ],
+                [
+                    "2017Q4",
+                    12.34872
+                ],
+                [
+                    "2017Q3",
+                    30.11204
+                ],
+                [
+                    "2017Q2",
+                    17.89352
+                ],
+                [
+                    "2017Q1",
+                    2.94972
+                ],
+                [
+                    "2016Q4",
+                    2.88537
+                ],
+                [
+                    "2016Q3",
+                    3.07798
+                ],
+                [
+                    "2016Q2",
+                    2.41841
+                ],
+                [
+                    "2016Q1",
+                    0.85325
+                ],
+                [
+                    "2015Q4",
+                    0.46369
+                ],
+                [
+                    "2015Q3",
+                    0.41679
+                ],
+                [
+                    "2015Q2",
+                    0.30952
+                ]
+            ]
+        }
+    ]
+}

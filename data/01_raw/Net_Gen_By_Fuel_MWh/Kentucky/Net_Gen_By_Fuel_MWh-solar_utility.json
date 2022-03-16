@@ -1,0 +1,116 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-KY-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-KY-99.Q",
+            "name": "Net generation : all utility-scale solar : Kentucky : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-KY",
+            "geography": "USA-KY",
+            "start": "2016Q2",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    8.67003
+                ],
+                [
+                    "2021Q3",
+                    12.87081
+                ],
+                [
+                    "2021Q2",
+                    13.67951
+                ],
+                [
+                    "2021Q1",
+                    8.19792
+                ],
+                [
+                    "2020Q4",
+                    8.33635
+                ],
+                [
+                    "2020Q3",
+                    12.89428
+                ],
+                [
+                    "2020Q2",
+                    13.94916
+                ],
+                [
+                    "2020Q1",
+                    7.6522
+                ],
+                [
+                    "2019Q4",
+                    8.01702
+                ],
+                [
+                    "2019Q3",
+                    14.68098
+                ],
+                [
+                    "2019Q2",
+                    14.27885
+                ],
+                [
+                    "2019Q1",
+                    8.02216
+                ],
+                [
+                    "2018Q4",
+                    6.96106
+                ],
+                [
+                    "2018Q3",
+                    11.75758
+                ],
+                [
+                    "2018Q2",
+                    13.21098
+                ],
+                [
+                    "2018Q1",
+                    7.50637
+                ],
+                [
+                    "2017Q4",
+                    5.25447
+                ],
+                [
+                    "2017Q3",
+                    5.65753
+                ],
+                [
+                    "2017Q2",
+                    5.789
+                ],
+                [
+                    "2017Q1",
+                    3.184
+                ],
+                [
+                    "2016Q4",
+                    3.668
+                ],
+                [
+                    "2016Q3",
+                    5.829
+                ],
+                [
+                    "2016Q2",
+                    2.235
+                ]
+            ]
+        }
+    ]
+}

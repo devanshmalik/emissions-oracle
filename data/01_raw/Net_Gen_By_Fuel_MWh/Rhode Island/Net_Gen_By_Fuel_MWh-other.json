@@ -1,0 +1,40 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.OTH-RI-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.OTH-RI-99.Q",
+            "name": "Net generation : other : Rhode Island : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All other sources of electric generation including waste heat; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-RI",
+            "geography": "USA-RI",
+            "start": "2002Q1",
+            "end": "2002Q4",
+            "updated": "2016-12-19T17:19:30-0500",
+            "data": [
+                [
+                    "2002Q4",
+                    148.25
+                ],
+                [
+                    "2002Q3",
+                    164.497
+                ],
+                [
+                    "2002Q2",
+                    150.826
+                ],
+                [
+                    "2002Q1",
+                    123.807
+                ]
+            ]
+        }
+    ]
+}

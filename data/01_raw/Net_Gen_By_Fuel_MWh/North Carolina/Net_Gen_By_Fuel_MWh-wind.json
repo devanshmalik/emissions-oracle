@@ -1,0 +1,108 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.WND-NC-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.WND-NC-99.Q",
+            "name": "Net generation : wind : North Carolina : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "Wind powered electricity generation; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-NC",
+            "geography": "USA-NC",
+            "start": "2016Q4",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    146.802
+                ],
+                [
+                    "2021Q3",
+                    77.57
+                ],
+                [
+                    "2021Q2",
+                    118.768
+                ],
+                [
+                    "2021Q1",
+                    162.024
+                ],
+                [
+                    "2020Q4",
+                    126.015
+                ],
+                [
+                    "2020Q3",
+                    79.814
+                ],
+                [
+                    "2020Q2",
+                    161.738
+                ],
+                [
+                    "2020Q1",
+                    178.7
+                ],
+                [
+                    "2019Q4",
+                    149.765
+                ],
+                [
+                    "2019Q3",
+                    79.583
+                ],
+                [
+                    "2019Q2",
+                    135.413
+                ],
+                [
+                    "2019Q1",
+                    158.378
+                ],
+                [
+                    "2018Q4",
+                    149.207
+                ],
+                [
+                    "2018Q3",
+                    82.195
+                ],
+                [
+                    "2018Q2",
+                    130.15
+                ],
+                [
+                    "2018Q1",
+                    181.22
+                ],
+                [
+                    "2017Q4",
+                    114.74
+                ],
+                [
+                    "2017Q3",
+                    94.002
+                ],
+                [
+                    "2017Q2",
+                    140.378
+                ],
+                [
+                    "2017Q1",
+                    121.623
+                ],
+                [
+                    "2016Q4",
+                    6.233
+                ]
+            ]
+        }
+    ]
+}

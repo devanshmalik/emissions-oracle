@@ -1,0 +1,120 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.WND-CT-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.WND-CT-99.Q",
+            "name": "Net generation : wind : Connecticut : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "Wind powered electricity generation; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-CT",
+            "geography": "USA-CT",
+            "start": "2016Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    3.275
+                ],
+                [
+                    "2021Q3",
+                    1.879
+                ],
+                [
+                    "2021Q2",
+                    3.132
+                ],
+                [
+                    "2021Q1",
+                    4.472
+                ],
+                [
+                    "2020Q4",
+                    3.899
+                ],
+                [
+                    "2020Q3",
+                    1.91
+                ],
+                [
+                    "2020Q2",
+                    3.099
+                ],
+                [
+                    "2020Q1",
+                    3.276
+                ],
+                [
+                    "2019Q4",
+                    3.67226
+                ],
+                [
+                    "2019Q3",
+                    1.904
+                ],
+                [
+                    "2019Q2",
+                    2.77201
+                ],
+                [
+                    "2019Q1",
+                    3.86673
+                ],
+                [
+                    "2018Q4",
+                    3.78436
+                ],
+                [
+                    "2018Q3",
+                    1.89015
+                ],
+                [
+                    "2018Q2",
+                    2.67016
+                ],
+                [
+                    "2018Q1",
+                    3.95035
+                ],
+                [
+                    "2017Q4",
+                    3.92261
+                ],
+                [
+                    "2017Q3",
+                    2.06941
+                ],
+                [
+                    "2017Q2",
+                    2.84619
+                ],
+                [
+                    "2017Q1",
+                    3.86779
+                ],
+                [
+                    "2016Q4",
+                    3.85589
+                ],
+                [
+                    "2016Q3",
+                    2.45621
+                ],
+                [
+                    "2016Q2",
+                    2.78061
+                ],
+                [
+                    "2016Q1",
+                    3.6493
+                ]
+            ]
+        }
+    ]
+}

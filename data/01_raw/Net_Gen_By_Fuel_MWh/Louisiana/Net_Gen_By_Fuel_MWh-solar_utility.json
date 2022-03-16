@@ -1,0 +1,104 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-LA-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-LA-99.Q",
+            "name": "Net generation : all utility-scale solar : Louisiana : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-LA",
+            "geography": "USA-LA",
+            "start": "2017Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    32.46345
+                ],
+                [
+                    "2021Q3",
+                    44.40778
+                ],
+                [
+                    "2021Q2",
+                    50.39091
+                ],
+                [
+                    "2021Q1",
+                    32.84109
+                ],
+                [
+                    "2020Q4",
+                    26.03003
+                ],
+                [
+                    "2020Q3",
+                    11.41393
+                ],
+                [
+                    "2020Q2",
+                    1.2179
+                ],
+                [
+                    "2020Q1",
+                    0.69815
+                ],
+                [
+                    "2019Q4",
+                    0.29097
+                ],
+                [
+                    "2019Q3",
+                    0.46781
+                ],
+                [
+                    "2019Q2",
+                    0.46779
+                ],
+                [
+                    "2019Q1",
+                    0.27943
+                ],
+                [
+                    "2018Q4",
+                    0.2809
+                ],
+                [
+                    "2018Q3",
+                    0.42335
+                ],
+                [
+                    "2018Q2",
+                    0.44898
+                ],
+                [
+                    "2018Q1",
+                    0.36477
+                ],
+                [
+                    "2017Q4",
+                    null
+                ],
+                [
+                    "2017Q3",
+                    null
+                ],
+                [
+                    "2017Q2",
+                    null
+                ],
+                [
+                    "2017Q1",
+                    null
+                ]
+            ]
+        }
+    ]
+}
