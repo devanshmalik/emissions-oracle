@@ -49,7 +49,9 @@ def app():
 
         # Aggregate by state and time unit (mean aggregation for emissions intensity)
         df = df.groupby([pd.Grouper(key="date", freq="Y"), "state"]).mean().reset_index()
+        # Filter data for chosen year and remove US region data
         data = df[df["date"].dt.year == chosen_year]
+        data = data[data["state"] != "United States"]
 
         # Map state names to state codes
         states_dict = load_yml(STATES_YML_FILEPATH)
@@ -65,7 +67,9 @@ def app():
 
         # Aggregate by state and time unit (sum aggregation for total emissions)
         df = df.groupby([pd.Grouper(key="date", freq="Y"), "state"]).sum().reset_index()
+        # Filter data for chosen year and remove US region data
         data = df[df["date"].dt.year == chosen_year]
+        data = data[data["state"] != "United States"]
 
         # Map state names to state codes
         states_dict = load_yml(STATES_YML_FILEPATH)
