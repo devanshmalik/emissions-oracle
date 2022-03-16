@@ -1,9 +1,7 @@
+# Package Imports
 from setuptools import find_packages, setup
 
-entry_point = (
-    "emissions-oracle = emissions_oracle.__main__:main"
-)
-
+entry_point = "emissions-oracle = emissions_oracle.__main__:main"
 
 # get the dependencies and installs
 with open("requirements.txt", encoding="utf-8") as f:
@@ -37,4 +35,3 @@ setup(
         ]
     },
 )
-

@@ -1,0 +1,18 @@
+# kgCO2e / MWh
+# Other_Renewables and Other is average of medians of remaining sources from NREL study
+Net_Gen_By_Fuel_MWh:
+    coal: 10
+    natural_gas: 71
+    nuclear: 13
+    hydro: 21
+    other_renewables: 31
+    wind: 13
+    solar_utility: 43
+    solar_all: 43
+    other: 31
+
+# Coal and coke - Mixed (Electric power sector) (kgCO2e/MMBTU)
+# Natural Gas: kgCO2e/MMBTU
+Fuel_Consumption_BTU:
+    coal: 96.252
+    natural_gas: 53.1145

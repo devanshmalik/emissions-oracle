@@ -1,0 +1,108 @@
+[app]
+app_intro = """
+This app allows you to analyze the historical and forecasted Electricity Generation and its associated greenhouse gas emissions in each of the US states in just a few clicks.
+
+The analysis has been split into the following sections which can be easily navigated to using
+the App Navigation dropdown in the sidebar to the left.
+* __Single Region Analysis__: Analyze electricity generation and emissions for a single region (broken down by generation sources) including details for each time-forecasting model.
+* __Multi-Region Analysis__: Compare electricity generation and emissions across multiple regions for any generation source.
+* __Emissions on USA Map__: Visualize emissions across all US states at any point in time (both historical and forecasted emissions).
+* __Appendix__: Details on app creation including data sources & preprocessing, forecasting assumptions, etc.
+
+__TIP__: All charts in this app are INTERACTIVE. Feel free to hover over specific values,
+zoom in on certain time periods, select specific curves, or even download the chart as an image!
+
+__When you're ready to get started, check off the 'Let's Get Started!' box above.__
+"""
+
+[data_types]
+[data_types.Net_Gen_By_Fuel_MWh]
+fuels = ['all_sources', 'coal', 'natural_gas', 'nuclear', 'hydro', 'wind', 'solar_all', 'other']
+
+[data_types.Fuel_Consumption_BTU]
+fuels = ['coal', 'natural_gas']
+
+[tooltips]
+app_page_choice = """
+Use this dropdown to navigate between different app pages:
+* __Single Region Analysis__: Analyze electricity generation and emissions for a single region including details for each time-forecasting model.
+* __Multi-Region Analysis__: Compare electricity generation and emissions across multiple regions for any generation source.
+* __Emissions on USA Map__: Visualize emissions across all US states at any point in time (both historical and forecasted emissions).
+* __Appendix__: Details on app creation including data sources & preprocessing, forecasting assumptions, etc.
+"""
+data_type_choice = """
+There are two main types of Electricity Generation data explored in this analysis:
+* __Net Electricity Generation (MWh)__: Represents the Net Electricity Generation in Megawatt Hours for different types of sources (coal, solar, etc.)
+* __Electricity Fuel Consumption (BTU)__: This represents the amount of heat from the specified fuel used for electricty generation. This data type is only relevant for Coal and Natural Gas as it represents the amount of fuel used compared to renewable sources such as wind and solar where this is redundant.
+__The default recommended option for almost all analysis is Net Electricity Generation (MWh).__
+"""
+show_all_sources_choice = """
+Shows one curve each for different types of electricity generation sources.\n
+For example: Separate curves for Coal, Nuclear, Wind Generation, etc.
+"""
+time_unit_choice = """
+__Note:__ The time-forecasting Prophet models were trained on __Quarterly__ time units.
+Thus, expect wider uncertainty ranges when grouping the data by __Year__.
+"""
+multi_sources_choice = """
+__Only available when 'Show Elec. Sources Separately' is checked__.
+"""
+show_emissions_choice = """
+__Only available when 'Show Elec. Sources Separately' is checked__.
+
+This option adds curves for the the Carbon Dioxide Equivalent Emissions for each of the chosen generation sources.
+
+CO2 "Equivalent" emissions is a metric used to compare the emissions from various greenhouse gases on the basis of their global-warming potential (GWP). Basically, not every greenhouse gas contributes equally to global warming. \n
+For example: Methane has a GWP of 25 which means that 1 kg of Methane is equivalent to 25 kg of Carbon Dioxide in the atmosphere.
+"""
+show_emissions_multi_region = """
+This option adds curves for the the Carbon Dioxide Equivalent Emissions for each of the chosen regions / generation type.
+
+CO2 "Equivalent" emissions is a metric used to compare the emissions from various greenhouse gases on the basis of their global-warming potential (GWP). Basically, not every greenhouse gas contributes equally to global warming. \n
+For example: Methane has a GWP of 25 which means that 1 kg of Methane is equivalent to 25 kg of Carbon Dioxide in the atmosphere.
+"""
+emissions_type_choice = """
+* __Emissions Intensity__: This is the volume of greenhouse gas emissions __per unit__ of electricity generated. Hence, the lower the emissions intensity, the greener the electricity grid. __This value allows for easier comparison of emissions between regions compared to using "Total Emissions".__
+* __Total Emissions__: This is the volume of total greenhouse gas emissions for the chosen electricity generation source.
+"""
+source_choice_for_map = """
+__Only available when 'Total Emissions' is chosen.__
+"""
+download_type_choice = """
+The different types of raw data downloads are:
+* __Net Electricity Generation__: This data includes net electricity generation for every region and every generation source within the region. Units: thousand megawatthours
+* __Total Emissions By Generation Source__: This data includes total greenhouse gas emissions from electricity generation for every region and every generation source within the region. Units: Thousand metric tons CO2eq
+* __Emissions Intensity__: This data includes the greenhouse gas emissions __per unit__ of electricity generated in every region. Units: kg CO2eq per kWh
+
+All the datasets listed above contain entries for both historical time periods and future forecasted periods till 2025.
+"""
+
+[explanations]
+single_region_prophet = """
+This visualization displays several information:
+* The blue line shows the __predictions__ made by the model on both training and validation periods.
+* The blue shade around is a __80% uncertainty interval__ on these predictions, obtained through a Monte Carlo simulation.
+* The black points are the __actual values__ of the target on training period.
+
+You can use the slider at the bottom or the buttons at the top to focus on a specific time period.
+"""
+components = """
+The forecast generated by Prophet is the sum of different contributions:
+* Trend
+* Seasonalities
+* Other factors such as holidays or external regressors
+"""
+emissions_intensity = """
+__Emissions Intensity__ is the volume of greenhouse gas emissions __per unit__ of electricity generated.
+Hence, the lower the emissions intensity, the greener the electricity grid.
+
+__This value allows for easier comparison of emissions between regions as it's unaffected
+by differences in the absolute amount of emissions in one region over another.__
+"""
+emissions_on_map = """
+This section allows one to visualize emissions across all US states at any point in time (both historical and forecasted emissions).
+
+For __Total Emissions__, the user can choose a specific type of generation (such as coal, natural gas, all sources combined, etc.)
+
+__Tip__: Hover over a state to see its specific value.
+"""
