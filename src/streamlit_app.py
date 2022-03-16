@@ -1,5 +1,7 @@
 import sys
-sys.path.append("../src")
+import os
+sys.path.append("../src/")
+print(os.path.basename(os.getcwd()))
 
 # Package Imports
 import streamlit as st
