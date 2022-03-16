@@ -9,8 +9,8 @@ matplotlib
 pandas
 plotly
 pre-commit
-prophet
 pystan==2.19.1.1
+prophet
 pytest
 pytest-cov
 pytest-mock
