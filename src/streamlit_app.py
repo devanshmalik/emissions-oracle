@@ -1,3 +1,6 @@
+import sys
+sys.path.append("..")
+
 # Package Imports
 import streamlit as st
 
