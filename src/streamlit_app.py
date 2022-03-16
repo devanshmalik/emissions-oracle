@@ -11,7 +11,7 @@ from streamlit_pages import (
 from streamlit_pages.multipage import MultiPage
 
 # Create an instance of the app
-st.set_page_config(page_title="Emissions Oracle", layout="wide")
+st.set_page_config(page_title="Emissions Oracle", layout="wide", page_icon="⚡")
 app = MultiPage()
 
 # Add all pages to application
