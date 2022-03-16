@@ -1,0 +1,120 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.OTH-VT-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.OTH-VT-99.Q",
+            "name": "Net generation : other : Vermont : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All other sources of electric generation including waste heat; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-VT",
+            "geography": "USA-VT",
+            "start": "2016Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    0.572
+                ],
+                [
+                    "2021Q3",
+                    -0.274
+                ],
+                [
+                    "2021Q2",
+                    0.452
+                ],
+                [
+                    "2021Q1",
+                    1.755
+                ],
+                [
+                    "2020Q4",
+                    -1.19819
+                ],
+                [
+                    "2020Q3",
+                    -1.67879
+                ],
+                [
+                    "2020Q2",
+                    0.64828
+                ],
+                [
+                    "2020Q1",
+                    -0.31829
+                ],
+                [
+                    "2019Q4",
+                    -0.49963
+                ],
+                [
+                    "2019Q3",
+                    -0.24309
+                ],
+                [
+                    "2019Q2",
+                    -0.11282
+                ],
+                [
+                    "2019Q1",
+                    -0.11146
+                ],
+                [
+                    "2018Q4",
+                    -0.12826
+                ],
+                [
+                    "2018Q3",
+                    -0.12504
+                ],
+                [
+                    "2018Q2",
+                    -0.04271
+                ],
+                [
+                    "2018Q1",
+                    0
+                ],
+                [
+                    "2017Q4",
+                    0
+                ],
+                [
+                    "2017Q3",
+                    0
+                ],
+                [
+                    "2017Q2",
+                    0
+                ],
+                [
+                    "2017Q1",
+                    0
+                ],
+                [
+                    "2016Q4",
+                    0
+                ],
+                [
+                    "2016Q3",
+                    0
+                ],
+                [
+                    "2016Q2",
+                    0
+                ],
+                [
+                    "2016Q1",
+                    0
+                ]
+            ]
+        }
+    ]
+}

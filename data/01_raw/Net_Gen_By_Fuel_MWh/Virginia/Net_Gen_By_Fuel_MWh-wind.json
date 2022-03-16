@@ -1,0 +1,40 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.WND-VA-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.WND-VA-99.Q",
+            "name": "Net generation : wind : Virginia : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "Wind powered electricity generation; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-VA",
+            "geography": "USA-VA",
+            "start": "2021Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    13.598
+                ],
+                [
+                    "2021Q3",
+                    8.144
+                ],
+                [
+                    "2021Q2",
+                    12.148
+                ],
+                [
+                    "2021Q1",
+                    15.693
+                ]
+            ]
+        }
+    ]
+}

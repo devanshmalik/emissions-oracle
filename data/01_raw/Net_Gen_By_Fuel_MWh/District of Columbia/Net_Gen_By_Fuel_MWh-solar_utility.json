@@ -1,0 +1,72 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-DC-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-DC-99.Q",
+            "name": "Net generation : all utility-scale solar : District Of Columbia : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-DC",
+            "geography": "USA-DC",
+            "start": "2019Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    null
+                ],
+                [
+                    "2021Q3",
+                    null
+                ],
+                [
+                    "2021Q2",
+                    7.84715
+                ],
+                [
+                    "2021Q1",
+                    null
+                ],
+                [
+                    "2020Q4",
+                    2.66072
+                ],
+                [
+                    "2020Q3",
+                    3.56006
+                ],
+                [
+                    "2020Q2",
+                    3.92716
+                ],
+                [
+                    "2020Q1",
+                    2.54707
+                ],
+                [
+                    "2019Q4",
+                    1.94382
+                ],
+                [
+                    "2019Q3",
+                    2.73432
+                ],
+                [
+                    "2019Q2",
+                    2.62029
+                ],
+                [
+                    "2019Q1",
+                    1.53057
+                ]
+            ]
+        }
+    ]
+}

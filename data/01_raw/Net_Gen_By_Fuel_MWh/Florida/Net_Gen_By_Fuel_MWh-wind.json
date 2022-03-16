@@ -1,0 +1,28 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.WND-FL-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.WND-FL-99.Q",
+            "name": "Net generation : wind : Florida : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "Wind powered electricity generation; All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-FL",
+            "geography": "USA-FL",
+            "start": "2019Q4",
+            "end": "2019Q4",
+            "updated": "2020-02-26T00:10:53-0500",
+            "data": [
+                [
+                    "2019Q4",
+                    1.422
+                ]
+            ]
+        }
+    ]
+}

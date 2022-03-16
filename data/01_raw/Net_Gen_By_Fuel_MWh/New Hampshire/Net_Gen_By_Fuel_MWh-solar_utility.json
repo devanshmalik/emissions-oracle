@@ -1,0 +1,56 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-NH-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-NH-99.Q",
+            "name": "Net generation : all utility-scale solar : New Hampshire : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-NH",
+            "geography": "USA-NH",
+            "start": "2020Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    null
+                ],
+                [
+                    "2021Q3",
+                    null
+                ],
+                [
+                    "2021Q2",
+                    null
+                ],
+                [
+                    "2021Q1",
+                    null
+                ],
+                [
+                    "2020Q4",
+                    0.58148
+                ],
+                [
+                    "2020Q3",
+                    1.25356
+                ],
+                [
+                    "2020Q2",
+                    1.31045
+                ],
+                [
+                    "2020Q1",
+                    0.72752
+                ]
+            ]
+        }
+    ]
+}

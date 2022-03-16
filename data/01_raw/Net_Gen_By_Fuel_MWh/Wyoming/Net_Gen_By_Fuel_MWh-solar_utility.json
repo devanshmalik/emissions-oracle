@@ -1,0 +1,76 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-WY-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-WY-99.Q",
+            "name": "Net generation : all utility-scale solar : Wyoming : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-WY",
+            "geography": "USA-WY",
+            "start": "2018Q4",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    26.867
+                ],
+                [
+                    "2021Q3",
+                    57.398
+                ],
+                [
+                    "2021Q2",
+                    60.573
+                ],
+                [
+                    "2021Q1",
+                    34.234
+                ],
+                [
+                    "2020Q4",
+                    27.011
+                ],
+                [
+                    "2020Q3",
+                    41.895
+                ],
+                [
+                    "2020Q2",
+                    60.813
+                ],
+                [
+                    "2020Q1",
+                    35.645
+                ],
+                [
+                    "2019Q4",
+                    27.44
+                ],
+                [
+                    "2019Q3",
+                    62.53
+                ],
+                [
+                    "2019Q2",
+                    58.47
+                ],
+                [
+                    "2019Q1",
+                    31.698
+                ],
+                [
+                    "2018Q4",
+                    0.824
+                ]
+            ]
+        }
+    ]
+}

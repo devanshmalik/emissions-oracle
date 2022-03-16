@@ -1,0 +1,104 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-ME-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-ME-99.Q",
+            "name": "Net generation : all utility-scale solar : Maine : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-ME",
+            "geography": "USA-ME",
+            "start": "2017Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    49.31472
+                ],
+                [
+                    "2021Q3",
+                    61.29943
+                ],
+                [
+                    "2021Q2",
+                    45.71944
+                ],
+                [
+                    "2021Q1",
+                    21.39835
+                ],
+                [
+                    "2020Q4",
+                    9.28411
+                ],
+                [
+                    "2020Q3",
+                    7.01322
+                ],
+                [
+                    "2020Q2",
+                    7.33149
+                ],
+                [
+                    "2020Q1",
+                    4.07018
+                ],
+                [
+                    "2019Q4",
+                    1.11037
+                ],
+                [
+                    "2019Q3",
+                    2.36778
+                ],
+                [
+                    "2019Q2",
+                    2.1263
+                ],
+                [
+                    "2019Q1",
+                    1.44555
+                ],
+                [
+                    "2018Q4",
+                    2.16655
+                ],
+                [
+                    "2018Q3",
+                    3.29995
+                ],
+                [
+                    "2018Q2",
+                    4.25157
+                ],
+                [
+                    "2018Q1",
+                    2.31357
+                ],
+                [
+                    "2017Q4",
+                    1.12467
+                ],
+                [
+                    "2017Q3",
+                    1.74998
+                ],
+                [
+                    "2017Q2",
+                    1.5544
+                ],
+                [
+                    "2017Q1",
+                    1.00695
+                ]
+            ]
+        }
+    ]
+}

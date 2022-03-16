@@ -1,0 +1,124 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-AR-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-AR-99.Q",
+            "name": "Net generation : all utility-scale solar : Arkansas : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-AR",
+            "geography": "USA-AR",
+            "start": "2015Q4",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    93.41676
+                ],
+                [
+                    "2021Q3",
+                    144.21111
+                ],
+                [
+                    "2021Q2",
+                    141.82895
+                ],
+                [
+                    "2021Q1",
+                    83.09743
+                ],
+                [
+                    "2020Q4",
+                    90.47077
+                ],
+                [
+                    "2020Q3",
+                    76.21808
+                ],
+                [
+                    "2020Q2",
+                    67.27454
+                ],
+                [
+                    "2020Q1",
+                    38.18448
+                ],
+                [
+                    "2019Q4",
+                    41.54985
+                ],
+                [
+                    "2019Q3",
+                    71.2921
+                ],
+                [
+                    "2019Q2",
+                    60.02287
+                ],
+                [
+                    "2019Q1",
+                    37.46814
+                ],
+                [
+                    "2018Q4",
+                    36.60652
+                ],
+                [
+                    "2018Q3",
+                    59.33252
+                ],
+                [
+                    "2018Q2",
+                    64.63344
+                ],
+                [
+                    "2018Q1",
+                    42.84053
+                ],
+                [
+                    "2017Q4",
+                    6.16466
+                ],
+                [
+                    "2017Q3",
+                    9.22229
+                ],
+                [
+                    "2017Q2",
+                    9.72956
+                ],
+                [
+                    "2017Q1",
+                    5.69501
+                ],
+                [
+                    "2016Q4",
+                    7.54053
+                ],
+                [
+                    "2016Q3",
+                    7.50724
+                ],
+                [
+                    "2016Q2",
+                    6.08517
+                ],
+                [
+                    "2016Q1",
+                    5.00908
+                ],
+                [
+                    "2015Q4",
+                    0.927
+                ]
+            ]
+        }
+    ]
+}

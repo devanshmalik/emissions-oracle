@@ -1,0 +1,112 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-ID-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-ID-99.Q",
+            "name": "Net generation : all utility-scale solar : Idaho : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-ID",
+            "geography": "USA-ID",
+            "start": "2016Q3",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    76.74554
+                ],
+                [
+                    "2021Q3",
+                    174.91024
+                ],
+                [
+                    "2021Q2",
+                    205.1467
+                ],
+                [
+                    "2021Q1",
+                    107.89326
+                ],
+                [
+                    "2020Q4",
+                    82.1846
+                ],
+                [
+                    "2020Q3",
+                    193.02072
+                ],
+                [
+                    "2020Q2",
+                    190.99443
+                ],
+                [
+                    "2020Q1",
+                    99.40126
+                ],
+                [
+                    "2019Q4",
+                    97.66215
+                ],
+                [
+                    "2019Q3",
+                    178.94154
+                ],
+                [
+                    "2019Q2",
+                    179.45682
+                ],
+                [
+                    "2019Q1",
+                    100.7785
+                ],
+                [
+                    "2018Q4",
+                    93.31041
+                ],
+                [
+                    "2018Q3",
+                    176.63899
+                ],
+                [
+                    "2018Q2",
+                    184.0973
+                ],
+                [
+                    "2018Q1",
+                    101.91731
+                ],
+                [
+                    "2017Q4",
+                    88.55207
+                ],
+                [
+                    "2017Q3",
+                    151.82909
+                ],
+                [
+                    "2017Q2",
+                    162.1872
+                ],
+                [
+                    "2017Q1",
+                    56.77665
+                ],
+                [
+                    "2016Q4",
+                    15.544
+                ],
+                [
+                    "2016Q3",
+                    14.257
+                ]
+            ]
+        }
+    ]
+}

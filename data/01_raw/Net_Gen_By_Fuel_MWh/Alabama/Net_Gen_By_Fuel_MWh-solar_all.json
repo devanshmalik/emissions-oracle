@@ -1,0 +1,152 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.TSN-AL-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.TSN-AL-99.Q",
+            "name": "Net generation : all solar : Alabama : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-AL",
+            "geography": "USA-AL",
+            "start": "2014Q1",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    null
+                ],
+                [
+                    "2021Q3",
+                    null
+                ],
+                [
+                    "2021Q2",
+                    null
+                ],
+                [
+                    "2021Q1",
+                    null
+                ],
+                [
+                    "2020Q4",
+                    null
+                ],
+                [
+                    "2020Q3",
+                    null
+                ],
+                [
+                    "2020Q2",
+                    null
+                ],
+                [
+                    "2020Q1",
+                    null
+                ],
+                [
+                    "2019Q4",
+                    null
+                ],
+                [
+                    "2019Q3",
+                    null
+                ],
+                [
+                    "2019Q2",
+                    null
+                ],
+                [
+                    "2019Q1",
+                    null
+                ],
+                [
+                    "2018Q4",
+                    null
+                ],
+                [
+                    "2018Q3",
+                    null
+                ],
+                [
+                    "2018Q2",
+                    null
+                ],
+                [
+                    "2018Q1",
+                    null
+                ],
+                [
+                    "2017Q4",
+                    null
+                ],
+                [
+                    "2017Q3",
+                    null
+                ],
+                [
+                    "2017Q2",
+                    null
+                ],
+                [
+                    "2017Q1",
+                    null
+                ],
+                [
+                    "2016Q4",
+                    32.34784
+                ],
+                [
+                    "2016Q3",
+                    2.64674
+                ],
+                [
+                    "2016Q2",
+                    2.26854
+                ],
+                [
+                    "2016Q1",
+                    1.6285
+                ],
+                [
+                    "2015Q4",
+                    0.65522
+                ],
+                [
+                    "2015Q3",
+                    0.9119
+                ],
+                [
+                    "2015Q2",
+                    0.95962
+                ],
+                [
+                    "2015Q1",
+                    0.68515
+                ],
+                [
+                    "2014Q4",
+                    0.63767
+                ],
+                [
+                    "2014Q3",
+                    0.88912
+                ],
+                [
+                    "2014Q2",
+                    0.92386
+                ],
+                [
+                    "2014Q1",
+                    0.65073
+                ]
+            ]
+        }
+    ]
+}

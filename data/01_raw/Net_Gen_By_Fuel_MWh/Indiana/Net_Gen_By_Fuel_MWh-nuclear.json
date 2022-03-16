@@ -1,0 +1,9 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "elec.gen.nuc-in-99.q"
+    },
+    "data": {
+        "error": "invalid series_id. For key registration, documentation, and examples see https://www.eia.gov/developer/"
+    }
+}

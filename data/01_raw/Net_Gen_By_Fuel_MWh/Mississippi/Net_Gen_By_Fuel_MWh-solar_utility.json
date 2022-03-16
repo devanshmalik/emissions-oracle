@@ -1,0 +1,108 @@
+{
+    "request": {
+        "command": "series",
+        "series_id": "ELEC.GEN.SUN-MS-99.Q"
+    },
+    "series": [
+        {
+            "series_id": "ELEC.GEN.SUN-MS-99.Q",
+            "name": "Net generation : all utility-scale solar : Mississippi : all sectors : quarterly",
+            "units": "thousand megawatthours",
+            "f": "Q",
+            "description": "All solar powered electricity generation (including photovoltaic and thermal); All sectors; ",
+            "copyright": "None",
+            "source": "EIA, U.S. Energy Information Administration",
+            "iso3166": "USA-MS",
+            "geography": "USA-MS",
+            "start": "2016Q4",
+            "end": "2021Q4",
+            "updated": "2022-02-25T15:25:17-0500",
+            "data": [
+                [
+                    "2021Q4",
+                    90.36787
+                ],
+                [
+                    "2021Q3",
+                    121.75843
+                ],
+                [
+                    "2021Q2",
+                    134.4907
+                ],
+                [
+                    "2021Q1",
+                    86.16864
+                ],
+                [
+                    "2020Q4",
+                    92.36828
+                ],
+                [
+                    "2020Q3",
+                    118.07382
+                ],
+                [
+                    "2020Q2",
+                    137.113
+                ],
+                [
+                    "2020Q1",
+                    82.562
+                ],
+                [
+                    "2019Q4",
+                    69.24138
+                ],
+                [
+                    "2019Q3",
+                    93.7932
+                ],
+                [
+                    "2019Q2",
+                    97.91101
+                ],
+                [
+                    "2019Q1",
+                    61.39442
+                ],
+                [
+                    "2018Q4",
+                    61.18425
+                ],
+                [
+                    "2018Q3",
+                    92.86961
+                ],
+                [
+                    "2018Q2",
+                    105.88275
+                ],
+                [
+                    "2018Q1",
+                    65.9164
+                ],
+                [
+                    "2017Q4",
+                    42.3848
+                ],
+                [
+                    "2017Q3",
+                    38.08381
+                ],
+                [
+                    "2017Q2",
+                    4.57833
+                ],
+                [
+                    "2017Q1",
+                    0.87608
+                ],
+                [
+                    "2016Q4",
+                    0
+                ]
+            ]
+        }
+    ]
+}
