@@ -1,10 +1,3 @@
-import sys
-import os
-sys.path.append("../src/")
-sys.path.append("/app/emissions-oracle/")
-sys.path.append("/app/emissions-oracle/src/")
-print(os.path.basename(os.getcwd()))
-
 # Package Imports
 import streamlit as st
 
