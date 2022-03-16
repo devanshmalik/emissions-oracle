@@ -1,8 +1,14 @@
+# Package Imports
 import streamlit as st
 
+# First Party Imports
+from streamlit_pages import (
+    appendix,
+    emissions_on_map,
+    multi_region_analysis,
+    single_region_analysis,
+)
 from streamlit_pages.multipage import MultiPage
-from streamlit_pages import emissions_on_map,  single_region_analysis, multi_region_analysis, appendix
-
 
 # Create an instance of the app
 st.set_page_config(page_title="Emissions Oracle", layout="wide")

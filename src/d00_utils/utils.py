@@ -1,15 +1,16 @@
-from dotenv import load_dotenv, find_dotenv
+# Python Libraries
 import logging
 import os
-import yaml
-
 from pathlib import Path
 
+# Package Imports
 import streamlit as st
 import toml
+import yaml
+from dotenv import find_dotenv, load_dotenv
 
 log = logging.getLogger(__name__)
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 
 def setup_env_vars():
@@ -26,22 +27,23 @@ def setup_env_vars():
 def get_filepath(parent_folder: str, save_folder: str, file_name: str) -> str:
     """Create folder for saving data (if not exists already) and return final filepath.
 
-    Eg: For parent_folder = 'data/01_raw/', save_folder = 'Net_Generation' and file_name = 'net_generation_{}.{}'   
+    Eg: For parent_folder = 'data/01_raw/', save_folder = 'Net_Generation'
+    and file_name = 'net_generation_{}.{}'
     - Create following folders: 'data/01_raw/Net_Generation'
     - Return filepath: 'data/01_raw/Net_Generation/net_generation_{}.{}'
-    
+
     Parameters
     -----------
     parent_folder: str
-        Path to parent folder 
-    save_folder: str    
-        Folder to create (if does not exist alread) and save object 
+        Path to parent folder
+    save_folder: str
+        Folder to create (if does not exist alread) and save object
     file_name: str
-        File name 
-        
+        File name
+
     Returns
     --------
-    str 
+    str
         Combined file path including file name
     """
     folder_path = os.path.join(parent_folder, save_folder)
@@ -52,13 +54,13 @@ def get_filepath(parent_folder: str, save_folder: str, file_name: str) -> str:
 
 def load_yml(filepath: str) -> dict:
     """
-    Load YAML config. 
-    
+    Load YAML config.
+
     Parameters
     -----------
     filepath: str
         File path to YAML config
-        
+
     Returns
     --------
     dict
@@ -71,7 +73,7 @@ def load_yml(filepath: str) -> dict:
 @st.cache(allow_output_mutation=True, ttl=300)
 def load_config(toml_filepath: str) -> dict:
     """Loads toml configuration file.
-    
+
     Parameters
     ----------
     toml_filepath : str

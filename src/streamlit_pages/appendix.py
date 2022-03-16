@@ -1,7 +1,11 @@
-import streamlit as st
+# Python Libraries
 from pathlib import Path
 
-from src.d00_utils.const import *
+# Package Imports
+import streamlit as st
+
+# First Party Imports
+from src.d00_utils.const import APPENDIX_FILEPATH
 
 
 def app():

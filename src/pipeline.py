@@ -1,19 +1,21 @@
-import warnings
+# Python Libraries
 import logging
+import warnings
 
-from src.d00_utils.const import *
-from src.d00_utils.utils import setup_env_vars, load_yml
+# First Party Imports
+from src.d00_utils.const import EIA_API_IDS_YML_FILEPATH, EMISSIONS_FACTORS_YML_FILEPATH
+from src.d00_utils.utils import load_yml, setup_env_vars
 from src.d01_data.get_raw_data import EIADataPull
 from src.d02_intermediate.clean_raw_data import DataCleaner
 from src.d03_processing.create_model_input import DataPreprocessor
 from src.d04_modelling.create_prophet_models import ModelTrainer
-from src.d06_reporting.create_forecasts import ModelForecast, combine_all_states_generation
 from src.d06_reporting.calculate_emissions import EmissionsCalculator
+from src.d06_reporting.create_forecasts import ModelForecast, combine_all_states_generation
 
 # Suppress Future Warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action="ignore", category=FutureWarning)
 log = logging.getLogger(__name__)
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 
 class PipelineInterface:
@@ -34,7 +36,10 @@ class PipelineInterface:
         setup_env_vars()
 
     def pull_data(self):
-        """Use the EIA API to pull data for all data type IDs in the yml for each state in states yml."""
+        """
+        Use the EIA API to pull data for all data type IDs in the yml
+        for each state in states yml.
+        """
         for data_type, api_ids_dict in self.eia_api_ids.items():
             log.info(f"Loading raw data for {data_type}")
             eia_data_pull = EIADataPull(api_ids_dict=api_ids_dict, data_type=data_type)
@@ -90,9 +95,12 @@ class PipelineInterface:
     def calculate_emissions(self):
         """
         Performs three types of emissions calculations:
-        1) Total Emissions Calculation: For each state, calculates emissions for each generation type
-        2) Emissions Intensity: Calculates emissions intensity for each state using total generation and total emissions
-        3) Combine State Emissions: Saves a combined CSV of all states for both total emissions and emissions intensity
+        1) Total Emissions Calculation: For each state, calculates emissions
+            for each generation type
+        2) Emissions Intensity: Calculates emissions intensity for each state
+            using total generation and total emissions
+        3) Combine State Emissions: Saves a combined CSV of all states for
+            both total emissions and emissions intensity
         """
         log.info("Calculating emissions for all regions...")
         emissions_calculator = EmissionsCalculator(emission_factors=self.emissions_factors)

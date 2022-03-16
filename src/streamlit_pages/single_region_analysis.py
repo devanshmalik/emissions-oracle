@@ -1,17 +1,23 @@
-import pandas as pd
-import streamlit as st
+# Python Libraries
 import json
 from typing import Tuple
 
-from prophet.serialize import model_from_json
+# Package Imports
+import pandas as pd
+import streamlit as st
 from prophet.plot import plot_components_plotly
+from prophet.serialize import model_from_json
 
-
-from src.d00_utils.const import *
+# First Party Imports
+from src.d00_utils.const import MODELS_FOLDER, STATES, STREAMLIT_CONFIG_FILEPATH
 from src.d00_utils.utils import get_filepath, load_config
-from src.d06_reporting.create_forecasts import read_forecast
 from src.d06_reporting.calculate_emissions import read_emissions
-from src.d06_visualization.plot import plot_prophet_forecast, plot_multiple_fuels, plot_combined_data_multiple_fuels
+from src.d06_reporting.create_forecasts import read_forecast
+from src.d06_visualization.plot import (
+    plot_combined_data_multiple_fuels,
+    plot_multiple_fuels,
+    plot_prophet_forecast,
+)
 
 
 def app():
@@ -19,7 +25,8 @@ def app():
 
     # Basic App Info
     get_started_toggle = st.checkbox(
-        "Let's Get Started!", value=False,
+        "Let's Get Started!",
+        value=False,
     )
     if not get_started_toggle:
         with st.expander("What is this app?", expanded=not get_started_toggle):
@@ -31,34 +38,47 @@ def app():
         chosen_data_type = st.sidebar.radio(
             "Select the type of data to analyze.",
             options=["Net Electricity Generation (MWh)", "Electricity Fuel Consumption (BTU)"],
-            help=config["tooltips"]["data_type_choice"]
+            help=config["tooltips"]["data_type_choice"],
         )
-        data_type = 'Net_Gen_By_Fuel_MWh' if chosen_data_type == "Net Electricity Generation (MWh)" else "Fuel_Consumption_BTU"
+        data_type = (
+            "Net_Gen_By_Fuel_MWh"
+            if chosen_data_type == "Net Electricity Generation (MWh)"
+            else "Fuel_Consumption_BTU"
+        )
         fuel_options = config["data_types"][data_type]["fuels"]
 
-        chosen_state = st.sidebar.selectbox('Pick a region to visualize', STATES)
+        chosen_state = st.sidebar.selectbox("Pick a region to visualize", STATES)
         show_all_sources_toggle = st.sidebar.checkbox(
-            "Show Elec. Sources Separately", value=False, help=config["tooltips"]["show_all_sources_choice"]
+            "Show Elec. Sources Separately",
+            value=False,
+            help=config["tooltips"]["show_all_sources_choice"],
         )
         chosen_fuel = st.sidebar.selectbox(
-            "Pick a generation type", options=fuel_options, disabled=show_all_sources_toggle,
+            "Pick a generation type",
+            options=fuel_options,
+            disabled=show_all_sources_toggle,
         )
         time_units_mapping = {"Quarter": "Q", "Year": "Y"}
         chosen_time_unit = st.sidebar.radio(
             "Select the time unit to view data by.",
             options=["Quarter", "Year"],
-            help=config["tooltips"]["time_unit_choice"]
+            help=config["tooltips"]["time_unit_choice"],
         )
         time_unit = time_units_mapping[chosen_time_unit]
 
         # Main Chart Options
         chosen_sources_multi = st.multiselect(
-            'Pick multiple generation sources to compare.', options=fuel_options, default=fuel_options[0],
-            disabled=not show_all_sources_toggle, help=config["tooltips"]["multi_sources_choice"]
+            "Pick multiple generation sources to compare.",
+            options=fuel_options,
+            default=fuel_options[0],
+            disabled=not show_all_sources_toggle,
+            help=config["tooltips"]["multi_sources_choice"],
         )
         show_emissions = st.checkbox(
-            "Show Greenhouse Gas Emissions", value=False,
-            disabled=not show_all_sources_toggle, help=config["tooltips"]["show_emissions_choice"]
+            "Show Greenhouse Gas Emissions",
+            value=False,
+            disabled=not show_all_sources_toggle,
+            help=config["tooltips"]["show_emissions_choice"],
         )
 
         if not show_all_sources_toggle:
@@ -67,7 +87,7 @@ def app():
 
         # Get Data and Plot
         if show_all_sources_toggle:
-            gen_by_fuels = read_forecast(data_type, 'combined', chosen_state, chosen_fuel)
+            gen_by_fuels = read_forecast(data_type, "combined", chosen_state, chosen_fuel)
             gen_by_fuels = aggregate_by_date(gen_by_fuels, time_unit)
             if show_emissions:
                 emissions_df = read_emissions("total", chosen_state)
@@ -75,15 +95,21 @@ def app():
 
                 # Chart Elements
                 title = "CO<sub>2</sub> Equivalent Emissions for Specified Generation"
-                ylabel = "Net Generation (Thousand  MWh)" if data_type == "Net_Gen_By_Fuel_MWh" else "Fuel Consumption (million MMBtu)"
-                fig = plot_combined_data_multiple_fuels(gen_by_fuels, emissions_df, chosen_sources_multi,
-                                                        title=title, ylabel=ylabel)
+                ylabel = (
+                    "Net Generation (Thousand  MWh)"
+                    if data_type == "Net_Gen_By_Fuel_MWh"
+                    else "Fuel Consumption (million MMBtu)"
+                )
+                fig = plot_combined_data_multiple_fuels(
+                    gen_by_fuels, emissions_df, chosen_sources_multi, title=title, ylabel=ylabel
+                )
             else:
                 title, ylabel = get_chart_labels(chosen_state, data_type)
-                fig = plot_multiple_fuels(gen_by_fuels,
-                                          chosen_sources_multi, title=title, ylabel=ylabel)
+                fig = plot_multiple_fuels(
+                    gen_by_fuels, chosen_sources_multi, title=title, ylabel=ylabel
+                )
         else:
-            gen_by_chosen_fuel = read_forecast(data_type, 'individual', chosen_state, chosen_fuel)
+            gen_by_chosen_fuel = read_forecast(data_type, "individual", chosen_state, chosen_fuel)
             gen_by_chosen_fuel = aggregate_by_date(gen_by_chosen_fuel, time_unit, "ds")
 
             title, ylabel = get_chart_labels(chosen_state, data_type)
@@ -111,15 +137,15 @@ def plot_components(chosen_fuel: str, chosen_state: str, data_type: str):
         Type of data being extracted such as `Net_Gen_By_Fuel_MWh`, `Fuel_Consumption_BTU`.
     """
     # Get model and forecast
-    save_folder = '{}/{}'.format(data_type, chosen_state)
-    models_file_name = '{}-{}.{}'.format(data_type, chosen_fuel, 'json')
+    save_folder = "{}/{}".format(data_type, chosen_state)
+    models_file_name = "{}-{}.{}".format(data_type, chosen_fuel, "json")
     models_file_path = get_filepath(MODELS_FOLDER, save_folder, models_file_name)
-    with open(models_file_path, 'r') as fin:
+    with open(models_file_path, "r") as fin:
         model = model_from_json(json.load(fin))
-    forecast = read_forecast(data_type, 'individual', chosen_state, chosen_fuel)
+    forecast = read_forecast(data_type, "individual", chosen_state, chosen_fuel)
 
     # Plot components
-    forecast['ds'] = pd.to_datetime(forecast['ds'], format='%Y-%m-%d')
+    forecast["ds"] = pd.to_datetime(forecast["ds"], format="%Y-%m-%d")
     fig = plot_components_plotly(model, forecast)
     st.plotly_chart(fig)
 
@@ -167,7 +193,6 @@ def aggregate_by_date(df: pd.DataFrame, time_unit: str, date_var: str = "date") 
     pd.DataFrame
         Data grouped by time unit
     """
-    df[date_var] = pd.to_datetime(df[date_var], format='%Y-%m-%d')
+    df[date_var] = pd.to_datetime(df[date_var], format="%Y-%m-%d")
     df = df.resample(time_unit, on=date_var).sum().reset_index()
     return df
-
