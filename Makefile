@@ -5,7 +5,7 @@ sphinx:
 	cd ..
 
 ghpages:
-	git -b checkout gh-pages && \
+	git checkout -b gh-pages && \
 	cp -r docs/_build/html/* . && \
 	touch .nojekyll && \
 	git add -u && \
