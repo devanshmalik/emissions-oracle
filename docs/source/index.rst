@@ -1,15 +1,19 @@
-.. test documentation master file, created by
-   sphinx-quickstart.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Emissions Oracle Documentation!
-==============================================
+====================================
 
-Contents:
+Forecast and visualize US Electricity Sector generation and associated greenhouse gas emissions in each of the US states in just a few clicks.
+
+`Explore the app online <https://share.streamlit.io/devanshmalik/emissions-oracle/src/streamlit_app.py>`_ through Streamlit cloud!
+
+Project Methodologies
+-----------------------
+
+The following pages aim to provide details on the methodologies used and assumptions made for various aspects of the project. This includes:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   getting-started
-   commands
+   data_science_pipeline
+   ghg_emissions
+   project_assumptions
+
