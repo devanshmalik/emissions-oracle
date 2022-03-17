@@ -1,6 +1,6 @@
 # Emissions Oracle
 
-Forecast and visualize US Electricity Sector generation and greenhouse gas emissions in each of the US states in just a few clicks.
+Forecast and visualize US Electricity Sector generation and associated greenhouse gas emissions in each of the US states in just a few clicks.
 
 <div align="center">
 
@@ -16,3 +16,10 @@ Forecast and visualize US Electricity Sector generation and greenhouse gas emiss
 [Explore the app online](https://share.streamlit.io/devanshmalik/emissions-oracle/src/streamlit_app.py) through Streamlit cloud!
 
 </div>
+
+## Project Methodologies 
+
+The following pages aim to provide details on the methodologies used and assumptions made for various aspects of the project. These include:
+- [Data Science End-to-End Pipeline](https://devanshmalik.github.io/emissions-oracle/data_science_pipeline.html) (data collection, preprocessing, feature engineering, modelling, reporting)
+- [Greenhouse Gas (GHG) Emissions](https://devanshmalik.github.io/emissions-oracle/ghg_emissions.html) (emissions calculations, assumptions, etc.)
+- [Project Assumptions](https://devanshmalik.github.io/emissions-oracle/project_assumptions.html) (electricity generation context related assumptions)

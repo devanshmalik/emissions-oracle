@@ -1,7 +1,7 @@
 Emissions Oracle Documentation!
 ====================================
 
-Forecast and visualize US Electricity Sector generation and greenhouse gas emissions in each of the US states in just a few clicks.
+Forecast and visualize US Electricity Sector generation and associated greenhouse gas emissions in each of the US states in just a few clicks.
 
 `Explore the app online <https://share.streamlit.io/devanshmalik/emissions-oracle/src/streamlit_app.py>`_ through Streamlit cloud!
 
