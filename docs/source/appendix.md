@@ -10,4 +10,4 @@ The following pages aim to provide details on the methodologies used and assumpt
 
 Complete source code for the web application is hosted on GitHub [here](https://github.com/devanshmalik/emissions-oracle).
 
-**Technology Stack**: Pandas, Streamlit, Plotly, Prophet, Sphinx, Scikit-learn
+**Python Technology Stack**: Pandas, Streamlit, Plotly, Prophet, Sphinx, Scikit-learn

@@ -24,4 +24,4 @@ The following pages aim to provide details on the methodologies used and assumpt
 - [Greenhouse Gas (GHG) Emissions](https://devanshmalik.github.io/emissions-oracle/ghg_emissions.html) (emissions calculations, assumptions, etc.)
 - [Project Assumptions](https://devanshmalik.github.io/emissions-oracle/project_assumptions.html) (electricity generation context related assumptions)
 
-**Technology Stack**: Pandas, Streamlit, Plotly, Prophet, Sphinx, Scikit-learn
+**Python Technology Stack**: Pandas, Streamlit, Plotly, Prophet, Sphinx, Scikit-learn

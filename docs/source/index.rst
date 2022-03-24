@@ -17,3 +17,10 @@ The following pages aim to provide details on the methodologies used and assumpt
    data_science_pipeline
    ghg_emissions
    project_assumptions
+
+Source Code
+^^^^^^^^^^^^
+
+Complete source code for the web application is hosted on GitHub `here <https://github.com/devanshmalik/emissions-oracle>`_.
+
+**Python Technology Stack**: Pandas, Streamlit, Plotly, Prophet, Sphinx, Scikit-learn
