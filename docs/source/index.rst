@@ -12,8 +12,8 @@ The following pages aim to provide details on the methodologies used and assumpt
 
 .. toctree::
    :maxdepth: 1
+   :caption: Methodologies
 
    data_science_pipeline
    ghg_emissions
    project_assumptions
-
