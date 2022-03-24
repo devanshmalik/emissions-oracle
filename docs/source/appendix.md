@@ -4,3 +4,10 @@ The following pages aim to provide details on the methodologies used and assumpt
 - [Data Science End-to-End Pipeline](https://devanshmalik.github.io/emissions-oracle/data_science_pipeline.html) (data collection, preprocessing, feature engineering, modelling, reporting)
 - [Greenhouse Gas (GHG) Emissions](https://devanshmalik.github.io/emissions-oracle/ghg_emissions.html) (emissions calculations, assumptions, etc.)
 - [Project Assumptions](https://devanshmalik.github.io/emissions-oracle/project_assumptions.html) (electricity generation context related assumptions)
+
+
+### Source Code 
+
+Complete source code for the web application is hosted on GitHub [here](https://github.com/devanshmalik/emissions-oracle).
+
+**Python Technology Stack**: Pandas, Streamlit, Plotly, Prophet, Sphinx, Scikit-learn
